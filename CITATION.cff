@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite it as below."
+title: "gen25"
+abstract: "gen25 — an Active Inference Institute repository."
+authors:
+  - name: "Active Inference Institute"
+date-released: "2025-03-14"
+license: CC0-1.0
+url: "https://github.com/ActiveInferenceInstitute/gen25"
+keywords:
+  - gen25
