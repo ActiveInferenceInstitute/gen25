@@ -1,6 +1,6 @@
 # AII sidecar — InstituteOS metadata. Schema: instituteos.platform.aii_sidecar
 meta:
-  updated: '2026-06-30'
+  updated: '2026-08-02'
 repo:
   name: gen25
   slug: gen25
@@ -21,6 +21,21 @@ artifacts:
 - path: LICENSE
   kind: doc
   description: License.
+- path: README.md
+  kind: doc
+  description: Repository orientation.
+- path: CONTRIBUTING.md
+  kind: doc
+  description: Contribution guide.
+- path: SECURITY.md
+  kind: doc
+  description: Security reporting policy.
+- path: CITATION.cff
+  kind: doc
+  description: Citation metadata.
+- path: TO-DO.md
+  kind: doc
+  description: Documentation backlog.
 provenance:
   license: CC0-1.0
   citation:
