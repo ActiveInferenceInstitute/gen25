@@ -24,6 +24,12 @@ artifacts:
 - path: README.md
   kind: doc
   description: Repository orientation.
+- path: docs/README.md
+  kind: doc
+  description: Documentation index.
+- path: AGENTS.md
+  kind: doc
+  description: Working conventions for agents and contributors.
 - path: CONTRIBUTING.md
   kind: doc
   description: Contribution guide.
