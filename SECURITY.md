@@ -17,9 +17,9 @@ Please **do not open a public issue** for security-sensitive findings. Instead, 
 them privately:
 
 1. GitHub private vulnerability reporting:
-   https://github.com/ActiveInferenceInstitute/gen25/security/advisories
+   <https://github.com/ActiveInferenceInstitute/gen25/security/advisories>
 2. Alternatively, contact the Active Inference Institute through its website:
-   https://www.activeinference.org
+   <https://www.activeinference.org>
 
 Please include the repository name, the affected file(s), and a description of the
 issue. You will receive an acknowledgment and, where applicable, credit in the fix.
