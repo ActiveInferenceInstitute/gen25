@@ -24,3 +24,5 @@ jobs:
         with:
           use-quiet-mode: "yes"
           use-verbose-mode: "yes"
+      - name: Lint markdown files
+        uses: DavidAnson/markdownlint-cli2-action@v24

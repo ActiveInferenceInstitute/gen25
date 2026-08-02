@@ -1,0 +1,7 @@
+config:
+  default: true
+  # Line length is not enforced for this documentation set.
+  MD013: false
+  # Issue templates and PR templates may start with YAML front matter
+  # or a checklist instead of a heading.
+  MD041: false
