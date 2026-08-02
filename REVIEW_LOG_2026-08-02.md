@@ -20,7 +20,8 @@ Branch: main (default; `origin/HEAD -> origin/main`)
 Repository has essentially no documentation: the only human-facing artifact was the
 LICENSE file. Findings by severity:
 
-**Minor**
+### Minor
+
 1. Commit `1ca023f` message says "CC-BY-4.0 LICENSE", but the committed file is
    CC0 1.0 Universal. The `.aii` sidecar (`provenance.license: CC0-1.0`) agrees with
    the file, so the file/sidecar are consistent and the drift is in the historical
@@ -28,20 +29,22 @@ LICENSE file. Findings by severity:
 2. GitHub repository description unset (API returns `None`); no topics set.
 3. `.aii/config.yaml` `meta.updated` would go stale on any sidecar edit.
 
-**Medium**
-4. No `README.md` — visitors get no orientation; GitHub renders no description.
-5. No `CONTRIBUTING.md`.
-6. No `SECURITY.md`.
-7. No `CITATION.cff` (sidecar already carries a citation text).
-8. No CI; docs links would be unguarded.
-9. `.aii` sidecar `artifacts:` lists only `LICENSE`; would drift as docs were added.
-10. No top-level TODO/roadmap file for tracking docs work.
+### Medium
 
-**Major**
-11. Sidecar declares capability `documentation` but the repo contains no documentation
+1. No `README.md` — visitors get no orientation; GitHub renders no description.
+2. No `CONTRIBUTING.md`.
+3. No `SECURITY.md`.
+4. No `CITATION.cff` (sidecar already carries a citation text).
+5. No CI; docs links would be unguarded.
+6. `.aii` sidecar `artifacts:` lists only `LICENSE`; would drift as docs were added.
+7. No top-level TODO/roadmap file for tracking docs work.
+
+### Major
+
+1. Sidecar declares capability `documentation` but the repo contains no documentation
     content beyond metadata — nothing to index in a `docs/` folder yet. Deferred until
     real gen25 content exists (no fabrication).
-12. No docs-adjacent automation beyond link checking. Deferred as disproportionate for
+2. No docs-adjacent automation beyond link checking. Deferred as disproportionate for
     the current doc count.
 
 Accuracy checks: LICENSE is the verbatim CC0 1.0 legal text (no drift). Sidecar facts
@@ -65,6 +68,7 @@ Commits (chronological):
 6. (this commit) docs: add TO-DO backlog and review log
 
 Details:
+
 - `README.md`: orientation grounded strictly in `.aii/config.yaml` (description,
   category, capability, ecosystem relation, license) and git history; contents table;
   inventory command (`git ls-files`, the sidecar-declared task); license and citation
@@ -98,3 +102,45 @@ Details:
 
 - Nothing private was referenced or committed; the repo contains no secrets (checked
   `.aii/config.yaml` and all added files for placeholders/credentials).
+
+## Follow-up pass — ambitious comprehensive updates (2026-08-02)
+
+Requested follow-up: "Proceed with all updates and research directions ambitiously
+comprehensively then push to main." Closed out every feasible open item and added the
+remaining high-value documentation infrastructure.
+
+**Research:** the Institute's public open-source map
+(<https://activeinference.institute/knowledge/>) lists gen25 in the open-source
+projects family as a project materials repository — used to ground the README
+introductory paragraph. No other authoritative public context was found for the
+repository's intended contents; nothing was fabricated.
+
+**Implemented (see git history for commit references):**
+
+- `AGENTS.md` — working conventions for agents and contributors (public-only, no
+  fabrication, sidecar upkeep, lint-before-push).
+- `docs/README.md` — documentation index; linked from the root README.
+- README enriched: license and docs-CI badges (both endpoints verified HTTP 200),
+  open-source-map grounding, Documentation section, contents table updated.
+- `.github/PULL_REQUEST_TEMPLATE.md` and
+  `.github/ISSUE_TEMPLATE/documentation.md` — contribution ergonomics matching
+  `CONTRIBUTING.md`.
+- markdownlint added to CI (`DavidAnson/markdownlint-cli2-action@v24`, release tag
+  verified) with `.markdownlint-cli2.yaml` (MD013/MD041 disabled, reasons documented).
+- Fixed markdownlint findings from the initial pass: emphasis labels converted to
+  headings, blank lines around lists, bare URLs converted to autolinks in
+  `SECURITY.md`.
+- `.aii/config.yaml` artifacts extended to `AGENTS.md` and `docs/README.md`.
+
+**Verified:**
+
+- markdownlint-cli2 v0.23.2: 0 issues across all 9 markdown files.
+- All internal relative links resolve; external links live (badges, open-source map,
+  activeinference.org, security advisories endpoint).
+- YAML parses for `.aii/config.yaml`, `CITATION.cff`, the workflow, and the lint
+  config.
+- Repository description update remains blocked (API 404 — token has no admin
+  scope); recorded as open in `TO-DO.md`.
+
+**Skipped:** no code, tests, or build to run — this is a documentation/metadata-only
+repository, so no heavy test suites apply.
