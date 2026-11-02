@@ -1,9 +1,10 @@
 # TO-DO — gen25 Documentation Backlog
 
-Date: 2026-08-02 · Last reviewed: 2026-08-02
+Date: 2026-08-02 · Last reviewed: 2026-11-01
 
 Scoping for the docs-deep pass and the ambitious follow-up pass (see
-`REVIEW_LOG_2026-08-02.md` for the full audit trail).
+`REVIEW_LOG_2026-08-02.md` for the full audit trail). The 2026-11-01 CI-currency
+pass is logged in `REVIEW_LOG_2026-11-01.md`.
 
 Severity scale:
 
@@ -17,10 +18,16 @@ Severity scale:
       Universal (the `.aii` sidecar agrees with the file: `provenance.license: CC0-1.0`).
       Historical commit-message drift — cannot be rewritten; noted in the review log.
       ✓ (documented in `REVIEW_LOG_2026-08-02.md`)
-- [ ] GitHub repository description is unset (API returns `None`). Setting it via
-      `gh repo edit` or `gh api -X PATCH` returns HTTP 404 — the push token has
-      contents-write scope only, no admin access. **Open**: requires an admin token
-      or a manual edit on github.com.
+- [x] GitHub repository description was unset (API returned `None`). **Resolved
+      2026-11-01**: the live description reads "Documentation-focused Active
+      Inference Institute project repository, federated through InstituteOS via the
+      `.aii` sidecar manifest." (verified with `gh api repos/ActiveInferenceInstitute/gen25`).
+      The 2026-08-02 blocker — a push token without admin scope — no longer applies
+      on this machine. ✓ (see `REVIEW_LOG_2026-11-01.md`)
+- [x] `actions/checkout` pinned to `v4` while the fleet has moved to `v7`. Bumped
+      to the newest stable major in `.github/workflows/docs.yml`; the two
+      documentation actions keep their current majors. ✓ (completed in this change,
+      `REVIEW_LOG_2026-11-01.md`)
 
 ## Medium
 
@@ -62,9 +69,12 @@ Severity scale:
 
 ## Open / deferred
 
-- Minor: GitHub repository description — needs an admin token or a manual edit on
-  github.com (verified: `gh api -X PATCH` → 404 with the current push token).
+- Minor: the sidecar's `repo.description` ("gen25 — an Active Inference Institute
+  repository.") is shorter than the live GitHub description. Decide whether the
+  sidecar should mirror the live text; not changed in the 2026-11-01 pass so the
+  identity field is not edited incidentally.
 - Major: substantive `docs/` content (architecture notes, usage guides) — deferred
   until real gen25 material exists in this repository.
-- Optional: GitHub topics on the repository (no grounded taxonomy source in-repo).
-  Not applied in this pass.
+- Optional: GitHub topics on the repository. Partially resolved: `active-inference`
+  and `documentation` are now set on the repository; any further topics still need a
+  grounded taxonomy source.
