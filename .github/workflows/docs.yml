@@ -1,14 +1,11 @@
 name: docs
 
 on:
+  # No path filter: a required docs check must report a verdict on every tip,
+  # including one that changes no markdown.
   push:
-    paths:
-      - "**.md"
-      - "**/*.md"
+    branches: [main]
   pull_request:
-    paths:
-      - "**.md"
-      - "**/*.md"
   workflow_dispatch:
 
 permissions:
