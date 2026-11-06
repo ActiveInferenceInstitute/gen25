@@ -42,4 +42,7 @@ when working in this repository. It is part of the repository's documentation; s
 npx --yes markdownlint-cli2 "**/*.md"
 ```
 
-The markdown link check runs in CI (`.github/workflows/docs.yml`).
+The markdown link check runs in CI (`.github/workflows/docs.yml`). The same
+workflow runs the pinned GNN conformance baseline (see `.github/GNN.md`);
+gen25 carries no `.gnn.md` model file, so the job validates the pinned upstream
+exemplar.
