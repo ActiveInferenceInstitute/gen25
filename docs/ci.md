@@ -39,5 +39,7 @@ npx --yes markdown-link-check -q -c mlc_config.json README.md
 ```
 
 CI runs the link check across every Markdown file; the command above checks one file,
-which is enough while editing. Remember that markdownlint applies to every `*.md` file in
-the repository, not only the one you changed.
+which is enough while editing. CI's markdownlint step is narrower: the action's default
+glob (`*.{md,markdown}`) lints only the repository-root Markdown, so run the recursive
+command above to lint `docs/` and `.aii/` as well. That recursive run currently reports
+four findings in the rendered `.aii/` documents; see [`../TO-DO.md`](../TO-DO.md).

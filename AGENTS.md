@@ -45,9 +45,11 @@ npx --yes markdownlint-cli2 "**/*.md"
 npx --yes markdown-link-check -q -c mlc_config.json README.md
 ```
 
-The link check reads `mlc_config.json` from the repository root. CI runs both tools
-over **every** Markdown file through `.github/workflows/docs.yml`, so a change to any
-`*.md` file must pass both. The workflow also runs a pinned GNN conformance job (see
+The link check reads `mlc_config.json` from the repository root. In CI the link check
+covers every Markdown file, but the `markdownlint-cli2-action` step runs with the
+action's default glob (`*.{md,markdown}`), so only the repository-root Markdown is
+linted; `docs/` and `.aii/` are not. Use the recursive local command above to lint every
+page. The workflow also runs a pinned GNN conformance job (see
 [`docs/gnn-conformance.md`](docs/gnn-conformance.md)); there is no code, build or test
 suite to run.
 

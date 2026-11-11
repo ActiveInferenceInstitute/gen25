@@ -57,7 +57,8 @@ Severity scale:
 
 - [x] Docs-adjacent automation: markdownlint added to CI
       (`.markdownlint-cli2.yaml`, `DavidAnson/markdownlint-cli2-action@v24`)
-      alongside the link check; all markdown files pass lint. Front-matter validation
+      alongside the link check; the action's default glob lints the repository-root
+      Markdown only (see the open item below). Front-matter validation
       is not applicable — repo docs carry no front matter.
       ✓ (`01f09c5`, `.github/workflows/docs.yml`)
 - [ ] The sidecar declares capability `documentation` but the repository contains no
@@ -79,6 +80,14 @@ Severity scale:
 - Optional: GitHub topics on the repository. Partially resolved: `active-inference`
   and `documentation` are now set on the repository; any further topics still need a
   grounded taxonomy source.
+- Minor: `DavidAnson/markdownlint-cli2-action` runs with its default
+  `*.{md,markdown}` glob, so `.github/workflows/docs.yml` lints only the
+  repository-root Markdown, while `AGENTS.md` and `docs/ci.md` previously implied
+  every page. A recursive local run (`npx --yes markdownlint-cli2 "**/*.md"`) reports
+  four findings in the rendered `.aii/` documents: MD012 in `.aii/docs/AGENTS.md` and
+  `.aii/docs/README.md`, and MD034 in `.aii/README.md`. Broadening the CI glob to
+  `**/*.md` requires regenerating those rendered files or fixing the findings first.
+  Decide whether to broaden the glob or keep root-only linting.
 
 ## Documentation pass 3 (2026-11-11)
 
@@ -96,8 +105,8 @@ Severity scale:
 
 ## Readiness standard gaps (measured 2026-11-11)
 
-Measured with the organization checker
-(`.github/scripts/check_readiness.py --repo ActiveInferenceInstitute/gen25 --path .`):
+Measured with the organization checker in the `ActiveInferenceInstitute/.github`
+repository (`scripts/check_readiness.py --repo ActiveInferenceInstitute/gen25 --path .`):
 the declared `content-data` tier reports 15 pass, **3 fail**, 3 unavailable (the
 `CORE-INHERIT-*` `github-api` criteria, offline) and 66 not-applicable.
 
