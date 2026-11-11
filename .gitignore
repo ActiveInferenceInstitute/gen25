@@ -1,0 +1,14 @@
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/
+
+# Python scratch
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Node tooling (markdownlint and friends)
+node_modules/

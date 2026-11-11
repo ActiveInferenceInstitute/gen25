@@ -1,0 +1,11 @@
+{
+  "schema": "aii-readiness/v1",
+  "repo": "ActiveInferenceInstitute/gen25",
+  "tier": "content-data",
+  "standard_version": "1.0.0",
+  "baseline": {
+    "commit": "241e54e8681a53a8877d82ec489e5e0fa382b6bc",
+    "measured_at": "2026-11-10"
+  },
+  "waivers": []
+}

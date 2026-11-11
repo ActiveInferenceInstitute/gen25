@@ -1,11 +1,13 @@
-# AII sidecar — InstituteOS metadata. Schema: instituteos.platform.aii_sidecar
+# AII sidecar — InstituteOS metadata. Schema: aii_platform.aii_sidecar
 meta:
-  updated: '2026-11-01'
+  sidecar_version: 1.2.1
+  updated: '2026-11-10'
 repo:
   name: gen25
   slug: gen25
   full_name: ActiveInferenceInstitute/gen25
-  description: gen25 — an Active Inference Institute repository.
+  description: Documentation-focused Active Inference Institute project repository,
+    federated through InstituteOS via the .aii sidecar manifest.
 institute:
   category: research
   steward: Active Inference Institute
@@ -42,6 +44,9 @@ artifacts:
 - path: TO-DO.md
   kind: doc
   description: Documentation backlog.
+- path: docs
+  kind: doc
+  description: Documentation tree.
 provenance:
   license: CC0-1.0
   citation:
@@ -51,7 +56,16 @@ instituteos:
   - gen25
 capabilities:
 - documentation
+- ci
+- citation
 tasks:
   inventory:
     cmd: git ls-files
     description: List tracked files.
+docs:
+- README.md
+- AGENTS.md
+- docs/INTEGRATION.md
+- docs/README.md
+- docs/AGENTS.md
+schema: aii-sidecar/v1
