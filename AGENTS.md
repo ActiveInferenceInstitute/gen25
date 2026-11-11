@@ -11,9 +11,8 @@ when working in this repository. It is part of the repository's documentation; s
   system, no test suite.
 - License: CC0 1.0 Universal (`LICENSE`); the `.aii` sidecar (`provenance.license`)
   declares the same.
-- Purpose metadata lives in `.aii/config.yaml` (schema:
-  `instituteos.platform.aii_sidecar`): category `research`, capability
-  `documentation`, federated via InstituteOS.
+- Purpose metadata lives in `.aii/config.yaml` (schema: `aii-sidecar/v1`):
+  category `research`, capability `documentation`, federated via InstituteOS.
 
 ## Hard rules
 
@@ -40,6 +39,8 @@ when working in this repository. It is part of the repository's documentation; s
 
 ```sh
 npx --yes markdownlint-cli2 "**/*.md"
+npx --yes markdown-link-check -q -c mlc_config.json README.md
 ```
 
-The markdown link check runs in CI (`.github/workflows/docs.yml`).
+The link check reads `mlc_config.json` from the repository root; CI runs the same
+tool over every markdown file through `.github/workflows/docs.yml`.

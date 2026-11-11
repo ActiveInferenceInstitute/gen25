@@ -20,7 +20,8 @@ lists gen25 in the open-source projects family as a project materials repository
 | `docs/README.md` | [Documentation index](docs/README.md). |
 | `AGENTS.md` | Working conventions for automated agents and contributors. |
 | `LICENSE` | CC0 1.0 Universal public-domain dedication. |
-| `.aii/config.yaml` | InstituteOS sidecar metadata (schema: `instituteos.platform.aii_sidecar`). |
+| `.aii/config.yaml` | InstituteOS sidecar metadata (schema: `aii-sidecar/v1`). |
+| `mlc_config.json` | `markdown-link-check` configuration used by CI. |
 | `TO-DO.md` | Scoped documentation backlog, maintained across docs passes. |
 | `CONTRIBUTING.md` | How to contribute to this repository. |
 | `SECURITY.md` | Security reporting policy. |
@@ -39,7 +40,9 @@ git ls-files
 
 The [documentation index](docs/README.md) maps every document in this repository.
 CI keeps the documentation honest: markdown links are checked and markdown is linted
-on every push and pull request that touches `.md` files.
+on every push to `main` and on every pull request. The workflow deliberately has no
+path filter, so the checks report a verdict on every tip even when a change touches
+no Markdown.
 
 ## License
 
