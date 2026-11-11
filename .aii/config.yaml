@@ -48,6 +48,27 @@ artifacts:
 - path: docs
   kind: doc
   description: Documentation tree.
+- path: docs/sidecar.md
+  kind: doc
+  description: The InstituteOS sidecar and readiness manifest.
+- path: docs/ci.md
+  kind: doc
+  description: The docs CI workflow, link checking and markdownlint.
+- path: docs/gnn-conformance.md
+  kind: doc
+  description: The pinned Generalized Notation Notation conformance job.
+- path: docs/review-process.md
+  kind: doc
+  description: Documentation backlog, review logs and verification.
+- path: .github/workflows/docs.yml
+  kind: code
+  description: Docs CI workflow (link check, markdownlint, GNN conformance).
+- path: .github/gnn-pin.json
+  kind: data
+  description: The pinned GNN parser revision the conformance job reads.
+- path: REVIEW_LOG_2026-11-01.md
+  kind: doc
+  description: Dated audit log for the 2026-11-01 CI-currency pass.
 provenance:
   license: CC0-1.0
   citation:

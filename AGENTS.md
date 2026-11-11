@@ -13,6 +13,9 @@ when working in this repository. It is part of the repository's documentation; s
   declares the same.
 - Purpose metadata lives in `.aii/config.yaml` (schema: `aii-sidecar/v1`):
   category `research`, capability `documentation`, federated via InstituteOS.
+- The modular documentation lives in [`docs/`](docs/README.md): [`sidecar.md`](docs/sidecar.md),
+  [`ci.md`](docs/ci.md), [`gnn-conformance.md`](docs/gnn-conformance.md) and
+  [`review-process.md`](docs/review-process.md).
 
 ## Hard rules
 
@@ -42,5 +45,17 @@ npx --yes markdownlint-cli2 "**/*.md"
 npx --yes markdown-link-check -q -c mlc_config.json README.md
 ```
 
-The link check reads `mlc_config.json` from the repository root; CI runs the same
-tool over every markdown file through `.github/workflows/docs.yml`.
+The link check reads `mlc_config.json` from the repository root. CI runs both tools
+over **every** Markdown file through `.github/workflows/docs.yml`, so a change to any
+`*.md` file must pass both. The workflow also runs a pinned GNN conformance job (see
+[`docs/gnn-conformance.md`](docs/gnn-conformance.md)); there is no code, build or test
+suite to run.
+
+## Documentation maintenance
+
+- Update [`TO-DO.md`](TO-DO.md) for backlog work and append a dated
+  `REVIEW_LOG_<date>.md` per review pass; the process is in
+  [`docs/review-process.md`](docs/review-process.md).
+- When files are added or removed, update `artifacts[]` in `.aii/config.yaml` and bump
+  `meta.updated`, then hand-sync `.aii/docs/INTEGRATION.md` when the `aii-platform`
+  kernel is unavailable; see [`docs/sidecar.md`](docs/sidecar.md).

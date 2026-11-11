@@ -45,6 +45,13 @@
 | `CITATION.cff` | `doc` | Citation metadata. |
 | `TO-DO.md` | `doc` | Documentation backlog. |
 | `docs` | `doc` | Documentation tree. |
+| `docs/sidecar.md` | `doc` | The InstituteOS sidecar and readiness manifest. |
+| `docs/ci.md` | `doc` | The docs CI workflow, link checking and markdownlint. |
+| `docs/gnn-conformance.md` | `doc` | The pinned Generalized Notation Notation conformance job. |
+| `docs/review-process.md` | `doc` | Documentation backlog, review logs and verification. |
+| `.github/workflows/docs.yml` | `code` | Docs CI workflow (link check, markdownlint, GNN conformance). |
+| `.github/gnn-pin.json` | `data` | The pinned GNN parser revision the conformance job reads. |
+| `REVIEW_LOG_2026-11-01.md` | `doc` | Dated audit log for the 2026-11-01 CI-currency pass. |
 
 ## Portable tasks
 

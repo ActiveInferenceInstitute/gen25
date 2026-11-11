@@ -1,6 +1,6 @@
 # TO-DO — gen25 Documentation Backlog
 
-Date: 2026-08-02 · Last reviewed: 2026-11-01
+Date: 2026-08-02 · Last reviewed: 2026-11-11
 
 Scoping for the docs-deep pass and the ambitious follow-up pass (see
 `REVIEW_LOG_2026-08-02.md` for the full audit trail). The 2026-11-01 CI-currency
@@ -61,11 +61,12 @@ Severity scale:
       is not applicable — repo docs carry no front matter.
       ✓ (`01f09c5`, `.github/workflows/docs.yml`)
 - [ ] The sidecar declares capability `documentation` but the repository contains no
-      documentation content beyond metadata. A `docs/` folder now exists (index in
-      `docs/README.md`), but architecture notes and usage guides should be added
-      **when actual gen25 material exists in this repo**. Deferred: there is no source
-      content in the repository to document, and fabricating documentation is out of
-      scope for this pass.
+      substantive documentation content beyond its own metadata. A modular `docs/` tree
+      now documents the repository's infrastructure (sidecar, CI, GNN conformance,
+      review process), but architecture notes and usage guides for gen25's own material
+      should be added **when that material exists in this repo**. Deferred: there is no
+      paper or source content committed here to document, and fabricating documentation
+      is out of scope.
 
 ## Open / deferred
 
@@ -78,3 +79,41 @@ Severity scale:
 - Optional: GitHub topics on the repository. Partially resolved: `active-inference`
   and `documentation` are now set on the repository; any further topics still need a
   grounded taxonomy source.
+
+## Documentation pass 3 (2026-11-11)
+
+- [x] Grew `docs/` from a single index into a modular tree: `sidecar.md` (the `.aii`
+      sidecar and `readiness.json`), `ci.md` (the docs workflow, link checking and
+      markdownlint), `gnn-conformance.md` (the pinned GNN job) and `review-process.md`
+      (backlog, review logs and verification), all linked from the index.
+- [x] Corrected `README.md` and `AGENTS.md` for accuracy: the repository is
+      documentation and metadata only, CI runs the link check over **every** Markdown
+      file (not only `README.md`), and the GNN conformance job exists.
+- [x] Bumped `.aii/readiness.json`'s `standard_version` to the current catalogue `1.1.0`.
+- [x] Registered `.github/workflows/docs.yml`, `.github/gnn-pin.json` and the two
+      `REVIEW_LOG_*.md` files as sidecar artifacts and hand-synced the rendered
+      `.aii/docs/INTEGRATION.md` (the `aii-platform` kernel is unavailable offline).
+
+## Readiness standard gaps (measured 2026-11-11)
+
+Measured with the organization checker
+(`.github/scripts/check_readiness.py --repo ActiveInferenceInstitute/gen25 --path .`):
+the declared `content-data` tier reports 15 pass, **3 fail**, 3 unavailable (the
+`CORE-INHERIT-*` `github-api` criteria, offline) and 66 not-applicable.
+
+- [ ] **`CORE-LOCK`** (blocking): the tier expects a tracked lock file
+      (`uv.lock`, `package-lock.json`, `Cargo.lock`, …) and this repository has no
+      package manager at all. Either the tier's `content-data` definition should not
+      require a lock file for a documentation-only repository, or the repository needs a
+      reasoned waiver. Owner decision — do not add a lock file just to satisfy the gate.
+- [ ] **`CORE-DEPENDABOT-ECOSYSTEM`** (blocking): follows from the same cause —
+      `.github/dependabot.yml` exists but no tracked lock file matches a known
+      ecosystem. The workflow actions are still watched; only the ecosystem entry is
+      unmatched.
+- [ ] **`CD-FRONTMATTER`** (non-blocking): the docs workflow has no front-matter
+      validation step. The repository's documents carry no front matter, so this is a
+      deliberate non-applicability rather than an oversight; record it as such or add a
+      validator if front matter is ever introduced.
+- [ ] The three `CORE-INHERIT-*` criteria (`CODEOWNERS`, `CONTRIBUTING`, `SECURITY`)
+      need `--github`; offline the checker reports them `unavailable` and the gate exits
+      `3`, never claiming a pass.
