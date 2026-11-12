@@ -69,6 +69,16 @@ Severity scale:
       paper or source content committed here to document, and fabricating documentation
       is out of scope.
 
+- [ ] **Education contract migration blocked:** the `gen25` member step in the
+      `courses` repository's `docs/workflows/education.md` requires
+      `specs/education/gen25.json` for generated course units. `git ls-files`
+      contains no course units or authored learning objectives; `README.md` describes
+      this checkout as documentation and metadata only. Commit the actual generated
+      course sources and their authored objectives before transcribing the bundle.
+      Do not invent units, reinterpret repository-maintenance guides as courses, or
+      publish an empty bundle as completed adoption. See the Education migration
+      entry in `REVIEW_LOG_2026-11-12.md`.
+
 ## Open / deferred
 
 - Minor: the sidecar's `repo.description` ("gen25 — an Active Inference Institute
