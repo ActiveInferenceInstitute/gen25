@@ -1,7 +1,7 @@
 # AII sidecar — InstituteOS metadata. Schema: aii_platform.aii_sidecar
 meta:
   sidecar_version: 1.2.1
-  updated: '2026-11-11'
+  updated: '2026-11-12'
 repo:
   name: gen25
   slug: gen25
@@ -60,6 +60,33 @@ artifacts:
 - path: docs/review-process.md
   kind: doc
   description: Documentation backlog, review logs and verification.
+- path: docs/RUN_GUIDE.md
+  kind: doc
+  description: The run.sh gate, its arms and the CI job mapping.
+- path: docs/documentation-index.md
+  kind: doc
+  description: Flat index of every long-lived document.
+- path: docs/_generated/COUNTS.md
+  kind: doc
+  description: Generated counts, gate pins and arm wall times.
+- path: docs/_generated/timings.json
+  kind: data
+  description: Arm wall times recorded by ./run.sh measure.
+- path: run.sh
+  kind: code
+  description: Single gate entry point; every CI step calls one of its arms.
+- path: scripts/gate_tools.json
+  kind: data
+  description: Pinned markdownlint-cli2 and markdown-link-check versions.
+- path: scripts/gnn_conformance.py
+  kind: code
+  description: The pinned GNN conformance check behind ./run.sh gnn.
+- path: scripts/docgen/counts.py
+  kind: code
+  description: Generates and verifies docs/_generated/COUNTS.md.
+- path: .github/GNN.md
+  kind: doc
+  description: Short pointer to what the GNN conformance job parses.
 - path: .github/workflows/docs.yml
   kind: code
   description: Docs CI workflow (link check, markdownlint, GNN conformance).
@@ -69,6 +96,9 @@ artifacts:
 - path: REVIEW_LOG_2026-11-01.md
   kind: doc
   description: Dated audit log for the 2026-11-01 CI-currency pass.
+- path: REVIEW_LOG_2026-11-12.md
+  kind: doc
+  description: Dated audit log for the 2026-11-12 gate and docs pass.
 provenance:
   license: CC0-1.0
   citation:
