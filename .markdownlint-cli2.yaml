@@ -5,3 +5,11 @@ config:
   # Issue templates and PR templates may start with YAML front matter
   # or a checklist instead of a heading.
   MD041: false
+
+# `./run.sh lint` lints the working tree, not only tracked files, so a new page
+# is checked before it is staged. Keep generated dependency trees out of scope:
+# the GNN arm installs its pinned parser into `.venv/gnn`, and those package
+# documents are not this repository's Markdown.
+ignores:
+  - "**/.venv/**"
+  - "**/node_modules/**"

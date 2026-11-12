@@ -1,0 +1,11 @@
+{
+  "arms": {
+    "gnn": 17.08,
+    "links": 7.56,
+    "lint": 5.21
+  },
+  "host": "Darwin arm64",
+  "node": "v26.13.0",
+  "protocol": "one run per arm on this host with warm tool caches; .venv/gnn removed first so the GNN arm bootstraps its interpreter and parser",
+  "recorded": "2026-11-12T12:55:05Z"
+}

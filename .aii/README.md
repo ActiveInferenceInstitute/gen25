@@ -43,8 +43,8 @@ Institute repositories without touching this project's own content. The schema i
 
 ## Links
 
-- **github:** https://github.com/ActiveInferenceInstitute/gen25
-- **website:** https://www.activeinference.org
+- **github:** <https://github.com/ActiveInferenceInstitute/gen25>
+- **website:** <https://www.activeinference.org>
 
 ## Validate
 

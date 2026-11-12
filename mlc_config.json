@@ -2,5 +2,11 @@
   "retryOn429": true,
   "retryCount": 3,
   "fallbackRetryDelay": "30s",
-  "timeout": "20s"
+  "timeout": "20s",
+  "ignorePatterns": [
+    {
+      "pattern": "^https://github\\.com/ActiveInferenceInstitute/InstituteOS$",
+      "reason": "The InstituteOS repository is private, so GitHub answers 404 to unauthenticated clients. The link is correct and stays in the prose."
+    }
+  ]
 }
