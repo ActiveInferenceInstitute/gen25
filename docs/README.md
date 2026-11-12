@@ -15,7 +15,7 @@ Start with the repository [README](../README.md) for orientation, then use the m
 | [`../AGENTS.md`](../AGENTS.md) | Working conventions for automated agents and contributors. |
 | [`sidecar.md`](sidecar.md) | The `.aii` InstituteOS sidecar and `readiness.json`: schema, roles and how to keep them accurate. |
 | [`ci.md`](ci.md) | The `docs` CI workflow: markdown link checking, markdownlint and how to run both locally. |
-| [`gnn-conformance.md`](gnn-conformance.md) | The pinned Generalized Notation Notation conformance job. |
+| [`gnn-conformance.md`](gnn-conformance.md) | The pinned Generalized Notation Notation baseline job (`gnn baseline (pinned)`). |
 | [`review-process.md`](review-process.md) | How documentation passes are scoped, logged and verified. |
 | [`../CONTRIBUTING.md`](../CONTRIBUTING.md) | How to contribute. |
 | [`../SECURITY.md`](../SECURITY.md) | Security reporting policy. |

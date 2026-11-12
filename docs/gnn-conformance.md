@@ -1,9 +1,13 @@
-# GNN conformance (pinned)
+# GNN baseline (pinned)
 
-gen25 publishes a conformance gate for
+gen25 publishes a baseline gate for
 [Generalized Notation Notation](https://github.com/ActiveInferenceInstitute/Generalized_Notation_Notation)
 (GNN) sketches. The authoritative short note is [`.github/GNN.md`](../.github/GNN.md);
 this page records how the job works.
+
+The workflow job id is `gnn-conformance`, but its display name is
+`gnn baseline (pinned)`. gen25 ships no `*.gnn.md`, so the job validates the
+pinned upstream exemplar rather than repository content.
 
 ## The pin
 
@@ -19,11 +23,12 @@ commit (`git+https://github.com/<repository>.git@<revision>`), and checks the in
 - **Repository sketches.** If the repository contains any `*.gnn.md` file, each one is
   parsed with `parse_gnn_formal`, syntax-validated with `validate_gnn_syntax`, and the
   collected sketches are type-checked with `GNNTypeChecker`. Results are printed as JSON
-  with `"source": "repository"`.
-- **Pinned exemplar (fallback).** When there is no sketch yet, the job fetches
-  `input/gnn_files/basics/static_perception.md` from the pinned revision, parses and
-  type-checks it, and prints `"source": "pinned-exemplar"`. This is a pipeline and pin
-  conformance baseline — **not** a claim that gen25 already contains a GNN model.
+  with `"source": "repository"` and `"result": "repository-content-passed"`.
+- **Pinned exemplar baseline (what runs today).** gen25 ships no sketch, so the
+  job fetches `input/gnn_files/basics/static_perception.md` from the pinned
+  revision, parses and type-checks it, and prints `"source": "pinned-exemplar"`
+  and `"result": "pinned-exemplar-baseline-passed"`. This is a pipeline and pin
+  baseline — **not** a claim that gen25 contains a GNN model.
 
 ## Adding a sketch
 

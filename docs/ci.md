@@ -10,7 +10,7 @@ including a change that touches no Markdown. It runs on `push` to `main`, on eve
 | Job | What it does |
 | --- | --- |
 | `markdown-link-check` | Checks every Markdown link with `gaurav-nelson/github-action-markdown-link-check`, then lints every Markdown file with `DavidAnson/markdownlint-cli2-action`. |
-| `gnn conformance (pinned)` | Conformance-checks Generalized Notation Notation sketches against a pinned parser — see [`gnn-conformance.md`](gnn-conformance.md). |
+| `gnn baseline (pinned)` | Checks the pinned Generalized Notation Notation parser against the pinned upstream exemplar. The repository ships no `*.gnn.md` sketch, so this is a baseline-only gate; if a sketch is added the same job type-checks it instead. See [`gnn-conformance.md`](gnn-conformance.md). |
 
 Each job declares `timeout-minutes`; the workflow declares `concurrency` with
 `cancel-in-progress: true` and read-only `permissions: contents: read`. Action `uses:`

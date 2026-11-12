@@ -14,7 +14,8 @@ lists gen25 in the open-source projects family as a project materials repository
 
 This repository holds documentation and InstituteOS metadata only: there is no source
 code, build system or test suite. Its CI checks Markdown links and lint, and runs a
-pinned GNN conformance check.
+pinned GNN baseline check (display name `gnn baseline (pinned)`; the job id
+remains `gnn-conformance`).
 
 ## Contents
 
@@ -49,7 +50,7 @@ modular pages are:
 | --- | --- |
 | [docs/sidecar.md](docs/sidecar.md) | the `.aii` InstituteOS sidecar and `readiness.json` |
 | [docs/ci.md](docs/ci.md) | the docs CI workflow, link checking and markdownlint |
-| [docs/gnn-conformance.md](docs/gnn-conformance.md) | the pinned GNN conformance job |
+| [docs/gnn-conformance.md](docs/gnn-conformance.md) | the pinned GNN baseline job |
 | [docs/review-process.md](docs/review-process.md) | backlog severities, review logs and verification |
 
 CI keeps the documentation honest: markdown links are checked and markdown is linted

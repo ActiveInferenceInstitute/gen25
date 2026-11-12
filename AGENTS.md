@@ -49,7 +49,8 @@ The link check reads `mlc_config.json` from the repository root. In CI the link 
 covers every Markdown file, but the `markdownlint-cli2-action` step runs with the
 action's default glob (`*.{md,markdown}`), so only the repository-root Markdown is
 linted; `docs/` and `.aii/` are not. Use the recursive local command above to lint every
-page. The workflow also runs a pinned GNN conformance job (see
+page. The workflow also runs a pinned GNN baseline job (display name
+`gnn baseline (pinned)`; see
 [`docs/gnn-conformance.md`](docs/gnn-conformance.md)); there is no code, build or test
 suite to run.
 
