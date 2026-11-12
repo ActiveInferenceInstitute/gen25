@@ -27,7 +27,8 @@ Severity scale:
 - [x] `actions/checkout` pinned to `v4` while the fleet has moved to `v7`. Bumped
       to the newest stable major in `.github/workflows/docs.yml`; the two
       documentation actions keep their current majors. ✓ (completed in this change,
-      `REVIEW_LOG_2026-11-01.md`)
+      `REVIEW_LOG_2026-11-01.md`; superseded 2026-11-12 — both Markdown actions became
+      pinned `npx` invocations of the same tools, see *Gate and docs pass 4*)
 
 ## Medium
 
@@ -58,7 +59,8 @@ Severity scale:
 - [x] Docs-adjacent automation: markdownlint added to CI
       (`.markdownlint-cli2.yaml`, `DavidAnson/markdownlint-cli2-action@v24`)
       alongside the link check; the action's default glob lints the repository-root
-      Markdown only (see the open item below). Front-matter validation
+      Markdown only (fixed 2026-11-12 — the lint step is now a `./run.sh` arm over the
+      whole working tree, see *Gate and docs pass 4*). Front-matter validation
       is not applicable — repo docs carry no front matter.
       ✓ (`01f09c5`, `.github/workflows/docs.yml`)
 - [ ] The sidecar declares capability `documentation` but the repository contains no
@@ -69,30 +71,35 @@ Severity scale:
       paper or source content committed here to document, and fabricating documentation
       is out of scope.
 
+- [ ] **Education contract migration blocked:** the `gen25` member step in the
+      `courses` repository's `docs/workflows/education.md` requires
+      `specs/education/gen25.json` for generated course units. `git ls-files`
+      contains no course units or authored learning objectives; `README.md` describes
+      this checkout as documentation and metadata only. Commit the actual generated
+      course sources and their authored objectives before transcribing the bundle.
+      Do not invent units, reinterpret repository-maintenance guides as courses, or
+      publish an empty bundle as completed adoption. See the Education migration
+      entry in `REVIEW_LOG_2026-11-12.md`.
+      **Missing artefact:** the generated course sources plus authored unit titles and
+      learning objectives — none exist in this repository (`git ls-files`, 39 tracked
+      files, no `specs/`, no course or manuscript directory).
+      **Owner:** the gen25 content authors (the `courses` repository owns the contract
+      and its checker). **Blocker is outside this repository:** no bundle can be emitted
+      until that authored content is committed here, so this stays open rather than
+      being adopted structurally.
+
 ## Open / deferred
 
-- Minor: the sidecar's `repo.description` ("gen25 — an Active Inference Institute
-  repository.") is shorter than the live GitHub description. Decide whether the
-  sidecar should mirror the live text; not changed in the 2026-11-01 pass so the
-  identity field is not edited incidentally.
+- Minor: `REVIEW_LOG_2026-08-02.md` is tracked but absent from the `.aii/config.yaml`
+  `artifacts:` list and from the rendered `.aii/docs/INTEGRATION.md` table, both of
+  which register `REVIEW_LOG_2026-11-01.md` and `REVIEW_LOG_2026-11-12.md` only.
+  Owner: whoever next regenerates the sidecar — edit it with the InstituteOS
+  generator so `INTEGRATION.md` is re-rendered, not by hand.
 - Major: substantive `docs/` content (architecture notes, usage guides) — deferred
   until real gen25 material exists in this repository.
 - Optional: GitHub topics on the repository. Partially resolved: `active-inference`
   and `documentation` are now set on the repository; any further topics still need a
   grounded taxonomy source.
-- Minor: `DavidAnson/markdownlint-cli2-action` runs with its default
-  `*.{md,markdown}` glob, so `.github/workflows/docs.yml` lints only the
-  repository-root Markdown, while `AGENTS.md` and `docs/ci.md` previously implied
-  every page. A recursive local run (`npx --yes markdownlint-cli2 "**/*.md"`) reports
-  four findings in the rendered `.aii/` documents: MD012 in `.aii/docs/AGENTS.md` and
-  `.aii/docs/README.md`, and MD034 in `.aii/README.md`. Broadening the CI glob to
-  `**/*.md` requires regenerating those rendered files or fixing the findings first.
-  Decide whether to broaden the glob or keep root-only linting.
-  ✓ **Resolved 2026-11-12**: the lint step is now the `lint` arm of `./run.sh` and covers
-  the working tree's `**/*.md`, so CI and a local run use the same scope; the four
-  findings were fixed (two trailing blank lines removed, two bare URLs converted to
-  autolinks) and `**/.venv/**` is excluded because the GNN arm installs its parser
-  there. See `REVIEW_LOG_2026-11-12.md`.
 
 ## Documentation pass 3 (2026-11-11)
 
@@ -104,9 +111,13 @@ Severity scale:
       documentation and metadata only, CI runs the link check over **every** Markdown
       file (not only `README.md`), and the GNN conformance job exists.
 - [x] Bumped `.aii/readiness.json`'s `standard_version` to the current catalogue `1.1.0`.
-- [x] Registered `.github/workflows/docs.yml`, `.github/gnn-pin.json` and the two
-      `REVIEW_LOG_*.md` files as sidecar artifacts and hand-synced the rendered
-      `.aii/docs/INTEGRATION.md` (the `aii-platform` kernel is unavailable offline).
+- [x] Registered `.github/workflows/docs.yml`, `.github/gnn-pin.json` and the two most
+      recent `REVIEW_LOG_*.md` files (`2026-11-01`, `2026-11-12`) as sidecar artifacts and
+      hand-synced the rendered `.aii/docs/INTEGRATION.md` (the `aii-platform` kernel is
+      unavailable offline); `REVIEW_LOG_2026-08-02.md` is still unregistered — see
+      *Open / deferred*.
+- [x] Aligned the sidecar's `repo.description` with the live GitHub description, which
+      closes the *Open / deferred* note about the shorter text. ✓ (`e555eaa`)
 
 ## Readiness standard gaps (measured 2026-11-11)
 
@@ -114,6 +125,8 @@ Measured with the organization checker in the `ActiveInferenceInstitute/.github`
 repository (`scripts/check_readiness.py --repo ActiveInferenceInstitute/gen25 --path .`):
 the declared `content-data` tier reports 15 pass, **3 fail**, 3 unavailable (the
 `CORE-INHERIT-*` `github-api` criteria, offline) and 66 not-applicable.
+Re-measured 2026-11-12 with the same command: `total: 15 pass, 3 fail, 0 waived,
+3 unavailable, 66 n/a` — unchanged, so every item below still stands.
 
 - [ ] **`CORE-LOCK`** (blocking): the tier expects a tracked lock file
       (`uv.lock`, `package-lock.json`, `Cargo.lock`, …) and this repository has no
@@ -137,23 +150,37 @@ the declared `content-data` tier reports 15 pass, **3 fail**, 3 unavailable (the
 - [x] One gate entry point: `run.sh` exposes `lint`, `links`, `counts`, `gnn`, `check`,
       `all` and `measure` as separately runnable arms, and every step in
       `.github/workflows/docs.yml` calls one of them, so CI holds no second copy of a
-      command. Documented in `docs/RUN_GUIDE.md`. ✓
+      command. Documented in `docs/RUN_GUIDE.md`. ✓ (`5a2d877`, PR #9)
 - [x] CI de-duplication: the two marketplace Markdown actions became pinned `npx`
       invocations of the same tools (`scripts/gate_tools.json`), and the GNN job's three
       inline steps (two `pip` invocations plus an inline heredoc, with a duplicated pin
       assertion) became one `./run.sh gnn` step over `scripts/gnn_conformance.py`. The
-      pin revision now appears only in `.github/gnn-pin.json`. ✓
+      workflow no longer restates the pin: `.github/gnn-pin.json` is its only
+      machine-readable home, and the prose that quotes the revision
+      (`.github/GNN.md`, `docs/gnn-conformance.md`, generated
+      `docs/_generated/COUNTS.md`) is updated with it. ✓ (`5a2d877`, PR #9)
+- [x] The GNN pin follows the canonical `gnn-importer-pin/v1` schema
+      (`.github/gnn-pin.json`: tag `v5.0.3`, revision
+      `8f293d9ba810e6eda5c09842d9c7ed9ffa5f92c1`) rather than a local variant, and
+      `./run.sh gnn` verifies the installed parser against it. ✓ (`dfd172d`, PR #8)
+- [x] The documentation workflow takes its interpreter from the shared
+      `setup-python-uv` composite action instead of an inline `uv` install.
+      ✓ (`e250b9d`, PR #6)
 - [x] The link check could not pass: `https://github.com/ActiveInferenceInstitute/InstituteOS`
       is a private repository, so GitHub answers 404 to unauthenticated clients and the
       full-tree check reported one dead link. Recorded a reasoned `ignorePatterns` entry
-      in `mlc_config.json` instead of removing the prose link. ✓
+      in `mlc_config.json` instead of removing the prose link. ✓ (`5a2d877`, PR #9)
 - [x] Measured numbers moved into a generated document: `docs/_generated/COUNTS.md` is
       written by `scripts/docgen/counts.py` from tracked files, the gate pins and
       `docs/_generated/timings.json` (recorded by `./run.sh measure`), and
-      `./run.sh counts --check` fails when it is stale. ✓
+      `./run.sh counts --check` fails when it is stale. ✓ (`5a2d877`, PR #9)
 - [x] `docs/documentation-index.md` added as the flat index of long-lived documents (the
       repository had a hub but no flat index), and the hub, `README.md` and `AGENTS.md`
-      now point at the gate and the generated numbers. ✓
+      now point at the gate and the generated numbers. ✓ (`5a2d877`, PR #9)
+- [x] Lint scope unified for CI and a local run: the lint step became the `lint`
+      arm of `./run.sh` over the working tree's `**/*.md` with `**/.venv/**` excluded,
+      and the four findings it then surfaced were fixed (two trailing blank lines,
+      two bare URLs). ✓ (`5a2d877`, PR #9)
 - [ ] The `gnn` arm's wall time is dominated by the interpreter bootstrap and the network:
       four observations on this host ranged from 11.65 s to 17.08 s. Not treated as a
       regression; re-measure with `./run.sh measure` before drawing a conclusion from the

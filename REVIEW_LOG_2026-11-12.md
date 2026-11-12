@@ -103,3 +103,23 @@ The workflow file parses, and its job keys remain `markdown-link-check` and
 - **No type-checker or test-suite arm.** The repository contains documentation and
   sidecar metadata only; adding an arm that has nothing to check would be decoration.
 - **GNN arm timing.** Left as an observation rather than a claim; see the table above.
+
+## Education migration — blocked
+
+The `gen25` step in the lead `courses` repository's
+`docs/workflows/education.md` requires emitting `specs/education/gen25.json`
+for the generated course units. The working tree was clean before this review.
+`git ls-files` lists repository-maintenance documentation, sidecar metadata and
+gate tooling, but no generated course units or authored learning objectives.
+`README.md` and the existing Major backlog item independently describe the
+absence of substantive project material.
+
+The canonical schema requires a verbatim title and learning objectives for each
+unit. There is no authored course source here to transcribe. No bundle, adoption
+pointer or vendored schema is added: an empty bundle could pass structural
+validation without performing the requested migration. The contract and every
+other member remain unchanged.
+
+**Unblock:** commit the actual generated course units with their authored titles
+and objectives, then transcribe them and run the lead's checker. Until then,
+leave the migration pull request open rather than merge a claim of adoption.
