@@ -6,7 +6,7 @@ local run and CI execute the same command; the workflow holds no second copy of 
 Change a check in `run.sh`, never in the workflow.
 
 ```sh
-./run.sh check   # fast default arm: generated-counts check, lint, links
+./run.sh check   # fast default arm: generated-counts check, tests, lint, links
 ./run.sh all     # the complete gate: check + the pinned GNN conformance arm
 ```
 
@@ -17,14 +17,18 @@ Change a check in `run.sh`, never in the workflow.
 | `./run.sh lint` | `markdownlint-cli2` over the working tree's Markdown | After editing prose. |
 | `./run.sh links` | `markdown-link-check` over every tracked Markdown file with [`mlc_config.json`](../mlc_config.json) | After editing a link or adding a page. |
 | `./run.sh counts` | Regenerates [`_generated/COUNTS.md`](_generated/COUNTS.md); `--check` verifies it instead of writing | After changing tracked files, the gate tool pins or the arm timings. |
+| `./run.sh test` | The gate's own regression tests, stdlib `unittest` over `tests/` | After changing a gate script or the acceptance rule it enforces. |
 | `./run.sh gnn` | Pinned GNN conformance — see [`gnn-conformance.md`](gnn-conformance.md) | After touching a `*.gnn.md` sketch or the pin. |
-| `./run.sh check` | `counts --check`, then `lint`, then `links` | Before every commit: the fast arm. |
+| `./run.sh check` | `counts --check`, then `test`, then `lint`, then `links` | Before every commit: the fast arm. |
 | `./run.sh all` | `check`, then `gnn` | Before opening a pull request. |
 | `./run.sh measure` | Runs `lint`, `links` and `gnn` once each and records [`_generated/timings.json`](_generated/timings.json) | After changing what an arm does. |
 
-There is deliberately no type-checker arm and no test-suite arm: this repository
-contains documentation and InstituteOS metadata only — no source code, no build system,
-no test suite. `./run.sh all` is therefore the complete gate.
+There is deliberately no type-checker arm: this repository contains documentation and
+InstituteOS metadata, not an application. The one executable suite is `./run.sh test`,
+which covers the gate's own acceptance logic — for example that the pinned GNN type
+checker must return exactly `True` and not the truthy-adjacent `2`. Each test builds a
+throwaway repository with a stubbed `gnn` package, so the arm needs no network and no
+parser install. `./run.sh all` is therefore the complete gate.
 
 The `links` arm checks the **tracked** file list rather than walking the checkout. That
 keeps a local run identical to CI and keeps it away from `.venv/gnn`, where the GNN arm
@@ -36,7 +40,7 @@ ignored in [`.markdownlint-cli2.yaml`](../.markdownlint-cli2.yaml).
 
 | Workflow job | Display name | Arms |
 | --- | --- | --- |
-| `markdown-link-check` | `markdown-link-check` (required status-check context) | `links`, `lint`, `counts --check` |
+| `markdown-link-check` | `markdown-link-check` (required status-check context) | `links`, `lint`, `counts --check`, `test` |
 | `gnn-conformance` | `gnn conformance (pinned)` | `gnn` |
 
 [`ci.md`](ci.md) records the workflow's action pins, its Python setup and the
@@ -49,6 +53,7 @@ the required context.
 | --- | --- |
 | `lint`, `links` | `node`/`npx`, `git`, `python3` (reads the tool pins) |
 | `counts` | `python3`, `git` |
+| `test` | `python3` (stdlib only; no network, no GNN install) |
 | `gnn` | `python3`, `uv` (creates `.venv/gnn`), network access |
 
 The Node tools are pinned in [`../scripts/gate_tools.json`](../scripts/gate_tools.json)

@@ -7,8 +7,9 @@ when working in this repository. It is part of the repository's documentation; s
 ## Repository facts
 
 - Public submodule of the ActiveInferenceInstitute GitHub organization.
-- Contents: documentation and InstituteOS metadata only — no source code, no build
-  system, no test suite.
+- Contents: documentation, InstituteOS metadata and the gate tooling only — no
+  application source code and no build system. The only executable tests are the gate's
+  own, in `tests/` (`./run.sh test`).
 - License: CC0 1.0 Universal (`LICENSE`); the `.aii` sidecar (`provenance.license`)
   declares the same.
 - Purpose metadata lives in `.aii/config.yaml` (schema: `aii-sidecar/v1`):
@@ -48,16 +49,17 @@ when working in this repository. It is part of the repository's documentation; s
 ## Local verification
 
 ```sh
-./run.sh check   # generated counts, markdownlint over the working tree, link check
+./run.sh check   # generated counts, gate tests, markdownlint over the working tree, link check
 ./run.sh all     # the same, plus the pinned GNN conformance arm
 ```
 
 The Node tools are pinned in [`scripts/gate_tools.json`](scripts/gate_tools.json) and
 fetched by `npx`; the `gnn` arm bootstraps its own interpreter in `.venv/gnn`. There is
-no type checker and no test suite to run: this repository carries documentation and
-sidecar metadata only, so `./run.sh all` is the complete gate. CI runs the same arms —
-the `markdown-link-check` job (a required status-check context) runs `links`, `lint` and
-`counts --check`, and `gnn-conformance` (`gnn conformance (pinned)`) runs `gnn`.
+no type checker: this repository carries documentation and sidecar metadata, and the
+only executable tests are the gate's own in `tests/`, so `./run.sh all` is the complete
+gate. CI runs the same arms — the `markdown-link-check` job (a required status-check
+context) runs `links`, `lint`, `counts --check` and `test`, and `gnn-conformance`
+(`gnn conformance (pinned)`) runs `gnn`.
 
 ## Documentation maintenance
 

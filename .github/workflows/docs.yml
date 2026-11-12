@@ -29,6 +29,8 @@ jobs:
         run: ./run.sh lint
       - name: Verify generated counts
         run: ./run.sh counts --check
+      - name: Run the gate's regression tests
+        run: ./run.sh test
 
   # GNN pin: .github/gnn-pin.json is the only place the pinned revision appears.
   gnn-conformance:

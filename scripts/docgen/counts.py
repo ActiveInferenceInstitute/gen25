@@ -104,7 +104,7 @@ def render() -> str:
     lines += [f"| `./run.sh {arm}` | {seconds(timings['arms'][arm])} |" for arm in GATE_ARMS]
     lines += [
         "",
-        "`./run.sh check` runs `counts --check`, `lint` and `links`; `./run.sh all` adds `gnn`.",
+        "`./run.sh check` runs `counts --check`, `test`, `lint` and `links`; `./run.sh all` adds `gnn`.",
         "",
         f"Measured {timings['recorded']} on {timings['host']} with Node {timings['node']}.",
         "Protocol: " + timings["protocol"].rstrip(".") + ".",

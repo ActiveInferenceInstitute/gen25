@@ -46,8 +46,9 @@ and the verification performed. Three logs exist today:
 
 That is the complete gate: the generated-counts check, markdownlint over the working
 tree, the link check, and the pinned GNN conformance arm. `./run.sh check` is the fast
-subset. The arms are documented in [`RUN_GUIDE.md`](RUN_GUIDE.md); there is no code,
-build or test suite in this repository, so these are the strongest checks available.
+subset. The arms are documented in [`RUN_GUIDE.md`](RUN_GUIDE.md); there is no
+application code or build system in this repository and the only executable tests cover
+the gate script itself, so these are the strongest checks available.
 
 Also confirm every internal relative link resolves to a real file, that the `.aii` files
 still parse, and that [`_generated/COUNTS.md`](_generated/COUNTS.md) was refreshed with

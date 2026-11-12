@@ -12,9 +12,10 @@ research-category repository whose declared capability is **documentation**. The
 Institute's public [open-source map](https://activeinference.institute/knowledge/)
 lists gen25 in the open-source projects family as a project materials repository.
 
-This repository holds documentation and InstituteOS metadata only: there is no source
-code, build system or test suite. Its CI checks Markdown links and lint, and runs a
-pinned GNN conformance check.
+This repository holds documentation, InstituteOS metadata and the gate tooling that
+keeps them honest: there is no application source code and no build system. Its CI checks
+Markdown links and lint, runs a pinned GNN conformance check, and runs the gate's own
+regression tests.
 
 ## Contents
 
@@ -23,8 +24,9 @@ pinned GNN conformance check.
 | `README.md` | This file — repository orientation. |
 | `docs/README.md` | [Documentation index](docs/README.md). |
 | `docs/RUN_GUIDE.md` | [Gate and run guide](docs/RUN_GUIDE.md) — the `run.sh` arms CI calls. |
-| `run.sh` | Single gate entry point: `lint`, `links`, `counts`, `gnn`, `check`, `all`, `measure`. |
+| `run.sh` | Single gate entry point: `lint`, `links`, `counts`, `test`, `gnn`, `check`, `all`, `measure`. |
 | `scripts/` | Gate implementation: the pinned GNN check, the counts generator, the tool pins. |
+| `tests/` | Regression tests for the gate script, run by `./run.sh test`. |
 | `docs/_generated/` | [Generated](docs/_generated/COUNTS.md) counts, gate pins and arm wall times. |
 | `AGENTS.md` | Working conventions for automated agents and contributors. |
 | `LICENSE` | CC0 1.0 Universal public-domain dedication. |
@@ -42,14 +44,15 @@ Everything this repository verifies runs through one entry point, and every CI s
 one of its arms:
 
 ```sh
-./run.sh check   # generated counts, markdownlint, link check — the fast arm
+./run.sh check   # generated counts, gate tests, markdownlint, link check — the fast arm
 ./run.sh all     # the complete gate, including the pinned GNN conformance arm
 ```
 
-There is no type-checker or test-suite arm because the repository has no source code and
-no test suite. The arms, their requirements, the CI job mapping and the measurement
-protocol are documented in [docs/RUN_GUIDE.md](docs/RUN_GUIDE.md); measured counts and arm
-wall times live only in the generated
+There is no type-checker arm. `./run.sh test` runs the gate's own regression tests, which
+assert the acceptance rules its scripts enforce in a throwaway repository with a stubbed
+parser, so they need no network. The arms, their requirements, the CI job mapping and the
+measurement protocol are documented in [docs/RUN_GUIDE.md](docs/RUN_GUIDE.md); measured
+counts and arm wall times live only in the generated
 [docs/_generated/COUNTS.md](docs/_generated/COUNTS.md).
 
 ## Inventory
@@ -74,9 +77,9 @@ modular pages are:
 | [docs/gnn-conformance.md](docs/gnn-conformance.md) | the pinned GNN conformance arm and its pin file |
 | [docs/review-process.md](docs/review-process.md) | backlog severities, review logs and verification |
 
-CI keeps the documentation honest: its `markdown-link-check` job runs the `links`, `lint`
-and `counts --check` arms and its `gnn-conformance` job (`gnn conformance (pinned)`) runs
-the `gnn` arm, on every push to `main` and on every pull request. The workflow
+CI keeps the documentation honest: its `markdown-link-check` job runs the `links`, `lint`,
+`counts --check` and `test` arms and its `gnn-conformance` job (`gnn conformance
+(pinned)`) runs the `gnn` arm, on every push to `main` and on every pull request. The workflow
 deliberately has no path filter, so the checks report a verdict on every tip even when a
 change touches no Markdown.
 

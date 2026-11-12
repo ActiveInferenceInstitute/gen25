@@ -1,9 +1,9 @@
 # Documentation
 
 Index for the gen25 repository documentation. gen25 is a **documentation and
-InstituteOS metadata repository**: it contains no source code, no build system and no
-test suite, so the documentation describes the repository's own conventions, metadata and
-CI rather than an application.
+InstituteOS metadata repository**: it contains no application source code and no build
+system, and its only executable tests cover the gate script itself, so the documentation
+describes the repository's own conventions, metadata and CI rather than an application.
 
 Start with the repository [README](../README.md) for orientation, then use the map below.
 Every long-lived document is also listed in the flat

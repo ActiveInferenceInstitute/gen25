@@ -100,8 +100,9 @@ The workflow file parses, and its job keys remain `markdown-link-check` and
 
 - **No manuscript work.** The repository has no `manuscript/` directory and no render
   script, so there is no render path to align with the estate manuscript conventions.
-- **No type-checker or test-suite arm.** The repository contains documentation and
-  sidecar metadata only; adding an arm that has nothing to check would be decoration.
+- **No type-checker arm.** The repository contains documentation and sidecar metadata
+  only. A test arm was added in the follow-up below, once there was executable logic to
+  cover: the gate script's own acceptance rule.
 - **GNN arm timing.** Left as an observation rather than a claim; see the table above.
 
 ## Education migration — blocked
@@ -123,3 +124,64 @@ other member remain unchanged.
 **Unblock:** commit the actual generated course units with their authored titles
 and objectives, then transcribe them and run the lead's checker. Until then,
 leave the migration pull request open rather than merge a claim of adoption.
+
+## Follow-up: executable regression test for the GNN gate sentinel
+
+The pass-4 change made the GNN arm require `GNNTypeChecker.validate_gnn_files(...)` to
+return exactly `True` instead of testing the result for falsiness, so a returned `2`
+(invalid files, or no files found) can no longer print a `"verified"` receipt. That
+change shipped without a test: the probe that demonstrated it stubbed
+`validate_gnn_files` by hand and was not committed, so neither a reviewer nor a future
+change could re-run it.
+
+### Reproduction, before and after
+
+`tests/test_gnn_conformance.py` was run against the pre-change script (commit
+`1c6c630`, `origin/main~1`) and the merged script (`7e8382d`):
+
+```text
+$ cd /tmp/gen25-prefix && python3 -m unittest discover -s tests -p 'test_*.py' -v
+test_accepting_result_passes_the_gate ... ok
+test_hard_failure_fails_the_gate ... ok
+test_invalid_files_result_fails_the_gate ... FAIL
+AssertionError: 1 != 0 : {"gnn-version": "5.0.3", "models": 1, "pin-revision": "8f293d9ba810e6eda5c09842d9c7ed9ffa5f92c1", "result": "verified", "source": "repository"}
+Ran 3 tests ... FAILED (failures=1)
+
+$ cd /tmp/gen25-p2 && python3 -m unittest discover -s tests -p 'test_*.py' -v
+test_accepting_result_passes_the_gate ... ok
+test_hard_failure_fails_the_gate ... ok
+test_invalid_files_result_fails_the_gate ... ok
+Ran 3 tests ... OK
+```
+
+The failing case is the finding itself: a type checker reporting `2` exited `0` and
+printed `"result": "verified"`.
+
+### Test design
+
+Each test copies the tracked `scripts/gnn_conformance.py` and `.github/gnn-pin.json`
+into a temporary repository, adds one `*.gnn.md` sketch, and puts a stub `gnn` package
+on `PYTHONPATH` whose `__version__` matches the pin (so `ensure_parser` short-circuits
+without `pip`) and whose `validate_gnn_files` returns `True`, `2` or `False` selected by
+an environment variable. The real script then runs in a subprocess, so the assertion is
+on its exit code, its stderr reason and its JSON receipt — the same surface CI sees. No
+network, no pinned-parser install, about 0.2 s for the three cases.
+
+### Wiring
+
+| Surface | Change |
+| --- | --- |
+| Gate entry point | `./run.sh test` runs `python3 -m unittest discover -s tests`; `check` and `all` now include it. |
+| CI | The required `markdown-link-check` job gains a `./run.sh test` step; its job key and display name are unchanged. |
+| Docs | `RUN_GUIDE.md`, `ci.md`, `gnn-conformance.md`, `README.md`, `AGENTS.md`, `CONTRIBUTING.md`, `docs/README.md` and `docs/review-process.md` no longer claim the repository has nothing to test. |
+
+### Verification
+
+```text
+./run.sh test      -> 3 tests, OK
+./run.sh check     -> COUNTS.md is current; lint 0 issues; links exit 0; 3 tests OK
+./run.sh all       -> exit 0
+```
+
+The pre-change run above is the evidence that the test is a regression test rather than a
+restatement of current behaviour.
