@@ -14,12 +14,16 @@ contributor runs locally; the arms and their requirements are in
 
 | Job key | Display name | What it runs |
 | --- | --- | --- |
-| `markdown-link-check` | `markdown-link-check` | `./run.sh links`, `./run.sh lint`, `./run.sh counts --check` (60-minute timeout). |
+| `markdown-link-check` | `markdown-link-check` | `./run.sh links`, `./run.sh lint`, `./run.sh counts --check`, `./run.sh test` (60-minute timeout). |
 | `gnn-conformance` | `gnn conformance (pinned)` | `./run.sh gnn` (15-minute timeout). |
 
 `markdown-link-check` is the repository's **required status-check context**. Its job key
 must not be renamed or removed; a check-run name change would silently wait for a context
 that never reports.
+
+`./run.sh test` runs the stdlib-`unittest` regression tests in `tests/`. They build a
+throwaway repository with a stubbed `gnn` package and assert the gate's own acceptance
+rules, so the required job needs no network and no parser install.
 
 ## Action pins
 
@@ -76,9 +80,9 @@ with `./run.sh measure`.
 ## Run the checks locally
 
 ```sh
-./run.sh check   # counts --check, lint, links: the fast default arm
+./run.sh check   # counts --check, test, lint, links: the fast default arm
 ./run.sh all     # the complete gate, including the pinned GNN arm
 ```
 
-Individual arms (`./run.sh lint`, `./run.sh links`, `./run.sh gnn`) are listed in
+Individual arms (`./run.sh lint`, `./run.sh links`, `./run.sh test`, `./run.sh gnn`) are listed in
 [`RUN_GUIDE.md`](RUN_GUIDE.md).

@@ -21,9 +21,10 @@ public, so please keep the ground rules below in mind.
 
 ## What lives here
 
-This repository currently contains metadata and documentation only: the `.aii` sidecar,
-the license, and the repository's documentation files. There is no source code, build
-system, or test suite to run. Everything it verifies runs through one entry point,
+This repository currently contains metadata, documentation and the gate tooling: the
+`.aii` sidecar, the license, the repository's documentation files, `run.sh` and
+`scripts/`. There is no application source code or build system; the only executable
+tests cover the gate script itself (`./run.sh test`). Everything it verifies runs through one entry point,
 `./run.sh`, and every CI step calls one of its arms — see
 [`docs/RUN_GUIDE.md`](docs/RUN_GUIDE.md).
 

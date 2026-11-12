@@ -8,13 +8,15 @@
 #   ./run.sh lint      markdownlint-cli2 over the working tree's Markdown
 #   ./run.sh links     markdown-link-check over every tracked Markdown file
 #   ./run.sh counts    regenerate docs/_generated/COUNTS.md (--check: verify it)
+#   ./run.sh test      the gate's own regression tests (stdlib unittest)
 #   ./run.sh gnn       pinned GNN conformance check (network + uv required)
-#   ./run.sh check     counts --check, then lint, then links (fast default arm)
+#   ./run.sh check     counts --check, then test, lint and links (fast default arm)
 #   ./run.sh all       check, then gnn (the complete gate)
 #   ./run.sh measure   run each arm once and record docs/_generated/timings.json
 #
-# There is no type-checker or test-suite arm: this repository carries documentation
-# and sidecar metadata only. See docs/RUN_GUIDE.md.
+# There is no type-checker arm: this repository carries documentation and sidecar
+# metadata, and `test` covers only the gate's own acceptance logic. See
+# docs/RUN_GUIDE.md.
 set -euo pipefail
 
 ROOT="$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
@@ -30,8 +32,8 @@ MARKDOWN_GIT_PATHSPEC='*.md'
 usage() {
   printf "usage: ./run.sh ARM\n\n"
   sed -n '/^#   \.\/run\.sh /p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
-  printf "\nNo type-checker or test-suite arm: this repository carries documentation\n"
-  printf "and sidecar metadata only. See docs/RUN_GUIDE.md.\n"
+  printf "\nNo type-checker arm: this repository carries documentation and sidecar\n"
+  printf "metadata, and 'test' covers only the gate's own acceptance logic.\n"
 }
 
 require() {
@@ -73,6 +75,10 @@ arm_links() {
 
 arm_counts() {
   "$PYTHON" "$ROOT/scripts/docgen/counts.py" "$@"
+}
+
+arm_test() {
+  "$PYTHON" -m unittest discover -s "$ROOT/tests" -p 'test_*.py' -v "$@"
 }
 
 arm_gnn() {
@@ -137,14 +143,17 @@ case "$arm" in
   lint) arm_lint "$@" ;;
   links) arm_links "$@" ;;
   counts) arm_counts "$@" ;;
+  test) arm_test "$@" ;;
   gnn) arm_gnn "$@" ;;
   check)
     arm_counts --check
+    arm_test
     arm_lint
     arm_links
     ;;
   all)
     arm_counts --check
+    arm_test
     arm_lint
     arm_links
     arm_gnn

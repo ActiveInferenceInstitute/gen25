@@ -56,6 +56,10 @@ The arm prints one JSON receipt and exits non-zero on any mismatch:
 ./run.sh gnn
 ```
 
+`./run.sh test` covers the acceptance rule without the network: it runs the real
+`scripts/gnn_conformance.py` in a throwaway repository against a stubbed parser whose type
+checker returns `True`, `2` and `False`, and asserts that only `True` exits 0.
+
 The arm bootstraps a seeded interpreter in `.venv/gnn` (git-ignored) with `uv`, then runs
 the script. Set `GNN_PYTHON` to use an existing interpreter, or `GNN_PYTHON_VERSION` to
 bootstrap a different CPython; CI sets it to `3.12`. The CI job key is `gnn-conformance`

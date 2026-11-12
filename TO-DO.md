@@ -188,3 +188,11 @@ Re-measured 2026-11-12 with the same command: `total: 15 pass, 3 fail, 0 waived,
 - [ ] No manuscript directory exists in this repository, so there is no render path to
       align with the estate manuscript conventions. Nothing to do until manuscript
       material is committed here.
+- [x] The fail-closed type-checker sentinel is pinned by an executable regression test,
+      not an ad-hoc probe: `tests/test_gnn_conformance.py` runs the real
+      `scripts/gnn_conformance.py` in a throwaway repository with a stubbed `gnn`
+      package whose `validate_gnn_files` returns `True`, `2` and `False`, and asserts
+      that only `True` exits 0 with a receipt. It is wired as `./run.sh test`, part of
+      `check`, `all` and the required `markdown-link-check` CI job, and it fails on the
+      pre-fix script (which exits 0 and reports `"result": "verified"` for a return of
+      `2`). ✓ (recorded in `REVIEW_LOG_2026-11-12.md`)

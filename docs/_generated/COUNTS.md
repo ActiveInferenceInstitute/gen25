@@ -9,7 +9,7 @@ and regenerate again. Prose links to this page instead of copying a number.
 
 | Metric | Value |
 | --- | --- |
-| Tracked files | 39 |
+| Tracked files | 40 |
 | Tracked Markdown files | 24 |
 | Pages under `docs/` | 8 |
 | GNN sketches (`*.gnn.md`) | 0 |
@@ -34,7 +34,7 @@ and regenerate again. Prose links to this page instead of copying a number.
 | `./run.sh links` | 7.56 |
 | `./run.sh gnn` | 17.08 |
 
-`./run.sh check` runs `counts --check`, `lint` and `links`; `./run.sh all` adds `gnn`.
+`./run.sh check` runs `counts --check`, `test`, `lint` and `links`; `./run.sh all` adds `gnn`.
 
 Measured 2026-11-12T12:55:05Z on Darwin arm64 with Node v26.13.0.
 Protocol: one run per arm on this host with warm tool caches; .venv/gnn removed first so the GNN arm bootstraps its interpreter and parser.
