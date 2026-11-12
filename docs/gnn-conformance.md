@@ -34,18 +34,20 @@ silently satisfy the gate.
 
 - **Repository sketches.** If the working tree contains any `*.gnn.md` file, each one is
   parsed with `parse_gnn_formal`, syntax-validated with `validate_gnn_syntax`, and the
-  collected sketches are type-checked with `GNNTypeChecker`. The receipt reports
-  `"source": "repository"`.
+  collected sketches are type-checked with `GNNTypeChecker`, which must return exactly
+  `True` (it returns `2` for invalid files or when no files are found, and `False` on a
+  hard failure; anything but `True` fails the arm). The receipt reports
+  `"source": "repository"` and `"result": "repository-content-passed"`.
 - **Pinned exemplar (fallback).** When there is no sketch yet, the arm fetches
   `input/gnn_files/basics/static_perception.md` from the pinned revision, parses it,
-  syntax-validates it and type-checks it, and reports `"source": "pinned-exemplar"`. This
-  is a pipeline and pin conformance baseline — **not** a claim that gen25 already contains
+  syntax-validates it and type-checks it, and reports `"source": "pinned-exemplar"` and
+  `"result": "pinned-exemplar-baseline-passed"`. This is a pipeline and pin conformance baseline — **not** a claim that gen25 already contains
   a GNN model.
 
 The arm prints one JSON receipt and exits non-zero on any mismatch:
 
 ```json
-{"gnn-version": "5.0.3", "models": 1, "pin-revision": "8f293d9ba810e6eda5c09842d9c7ed9ffa5f92c1", "result": "verified", "source": "pinned-exemplar"}
+{"gnn-version": "5.0.3", "models": 1, "pin-revision": "8f293d9ba810e6eda5c09842d9c7ed9ffa5f92c1", "result": "pinned-exemplar-baseline-passed", "source": "pinned-exemplar"}
 ```
 
 ## Running it

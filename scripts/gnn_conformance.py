@@ -15,7 +15,7 @@ The check
    the repository has no sketch, and
 4. prints one JSON receipt and exits non-zero on any mismatch.
 
-Exit codes: 0 verified, 1 pin/parse/type-check failure, 2 unusable environment.
+Exit codes: 0 passed, 1 pin/parse/type-check failure, 2 unusable environment.
 """
 
 from __future__ import annotations
@@ -128,7 +128,9 @@ def check_sketches(sketches: list[Path], prefix: str) -> int:
         parsed = parse_gnn_formal(sketch)
         if parsed is None or getattr(parsed, "parse_errors", None):
             raise ConformanceError(f"{sketch} did not parse cleanly")
-        valid, errors = validate_gnn_syntax(sketch.read_text(encoding="utf-8"))
+        valid, errors = validate_gnn_syntax(
+            sketch.read_text(encoding="utf-8"), is_content=True
+        )
         if not valid:
             raise ConformanceError(f"{sketch} syntax errors: {errors!r}")
     with tempfile.TemporaryDirectory(prefix=prefix) as output_dir:
@@ -136,8 +138,14 @@ def check_sketches(sketches: list[Path], prefix: str) -> int:
         model_dir.mkdir()
         for index, sketch in enumerate(sketches):
             shutil.copy2(sketch, model_dir / f"{index:03d}_{sketch.name}")
-        if not GNNTypeChecker().validate_gnn_files(model_dir, Path(output_dir)):
-            raise ConformanceError("GNN type checker rejected the checked sketches")
+        # validate_gnn_files returns True (every file valid), 2 (invalid files or no
+        # files found) or False (hard failure). 2 is truthy-adjacent for a bare
+        # ``not`` test, so require the exact True sentinel.
+        outcome = GNNTypeChecker().validate_gnn_files(model_dir, Path(output_dir))
+        if outcome is not True:
+            raise ConformanceError(
+                f"GNN type checker did not accept the checked sketches (returned {outcome!r})"
+            )
     return len(sketches)
 
 
@@ -168,7 +176,11 @@ def verify(root: Path, pin: dict[str, str]) -> dict[str, object]:
         "pin-revision": pin["revision"],
         "models": models,
         "source": source,
-        "result": "verified",
+        "result": (
+            "repository-content-passed"
+            if source == "repository"
+            else "pinned-exemplar-baseline-passed"
+        ),
     }
 
 
