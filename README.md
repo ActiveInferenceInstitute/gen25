@@ -22,6 +22,10 @@ pinned GNN conformance check.
 | --- | --- |
 | `README.md` | This file — repository orientation. |
 | `docs/README.md` | [Documentation index](docs/README.md). |
+| `docs/RUN_GUIDE.md` | [Gate and run guide](docs/RUN_GUIDE.md) — the `run.sh` arms CI calls. |
+| `run.sh` | Single gate entry point: `lint`, `links`, `counts`, `gnn`, `check`, `all`, `measure`. |
+| `scripts/` | Gate implementation: the pinned GNN check, the counts generator, the tool pins. |
+| `docs/_generated/` | [Generated](docs/_generated/COUNTS.md) counts, gate pins and arm wall times. |
 | `AGENTS.md` | Working conventions for automated agents and contributors. |
 | `LICENSE` | CC0 1.0 Universal public-domain dedication. |
 | `.aii/config.yaml` | InstituteOS sidecar metadata (schema: `aii-sidecar/v1`). |
@@ -31,6 +35,22 @@ pinned GNN conformance check.
 | `SECURITY.md` | Security reporting policy. |
 | `CITATION.cff` | Machine-readable citation metadata. |
 | `REVIEW_LOG_*.md` | Dated audit logs for documentation review passes. |
+
+## Gate
+
+Everything this repository verifies runs through one entry point, and every CI step calls
+one of its arms:
+
+```sh
+./run.sh check   # generated counts, markdownlint, link check — the fast arm
+./run.sh all     # the complete gate, including the pinned GNN conformance arm
+```
+
+There is no type-checker or test-suite arm because the repository has no source code and
+no test suite. The arms, their requirements, the CI job mapping and the measurement
+protocol are documented in [docs/RUN_GUIDE.md](docs/RUN_GUIDE.md); measured counts and arm
+wall times live only in the generated
+[docs/_generated/COUNTS.md](docs/_generated/COUNTS.md).
 
 ## Inventory
 
@@ -42,20 +62,23 @@ git ls-files
 
 ## Documentation
 
-The [documentation index](docs/README.md) maps every document in this repository. The
+The [documentation index](docs/README.md) maps every document in this repository, and
+[docs/documentation-index.md](docs/documentation-index.md) is the flat list of them. The
 modular pages are:
 
 | Document | Covers |
 | --- | --- |
+| [docs/RUN_GUIDE.md](docs/RUN_GUIDE.md) | the `run.sh` arms, the CI job mapping, requirements and the measurement protocol |
 | [docs/sidecar.md](docs/sidecar.md) | the `.aii` InstituteOS sidecar and `readiness.json` |
-| [docs/ci.md](docs/ci.md) | the docs CI workflow, link checking and markdownlint |
-| [docs/gnn-conformance.md](docs/gnn-conformance.md) | the pinned GNN conformance job |
+| [docs/ci.md](docs/ci.md) | the docs CI workflow, action pins, link checking and markdownlint |
+| [docs/gnn-conformance.md](docs/gnn-conformance.md) | the pinned GNN conformance arm and its pin file |
 | [docs/review-process.md](docs/review-process.md) | backlog severities, review logs and verification |
 
-CI keeps the documentation honest: markdown links are checked and markdown is linted
-on every push to `main` and on every pull request. The workflow deliberately has no
-path filter, so the checks report a verdict on every tip even when a change touches
-no Markdown.
+CI keeps the documentation honest: its `markdown-link-check` job runs the `links`, `lint`
+and `counts --check` arms and its `gnn-conformance` job (`gnn conformance (pinned)`) runs
+the `gnn` arm, on every push to `main` and on every pull request. The workflow
+deliberately has no path filter, so the checks report a verdict on every tip even when a
+change touches no Markdown.
 
 ## Readiness
 

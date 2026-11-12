@@ -49,9 +49,19 @@
 | `docs/ci.md` | `doc` | The docs CI workflow, link checking and markdownlint. |
 | `docs/gnn-conformance.md` | `doc` | The pinned Generalized Notation Notation conformance job. |
 | `docs/review-process.md` | `doc` | Documentation backlog, review logs and verification. |
+| `docs/RUN_GUIDE.md` | `doc` | The run.sh gate, its arms and the CI job mapping. |
+| `docs/documentation-index.md` | `doc` | Flat index of every long-lived document. |
+| `docs/_generated/COUNTS.md` | `doc` | Generated counts, gate pins and arm wall times. |
+| `docs/_generated/timings.json` | `data` | Arm wall times recorded by ./run.sh measure. |
+| `run.sh` | `code` | Single gate entry point; every CI step calls one of its arms. |
+| `scripts/gate_tools.json` | `data` | Pinned markdownlint-cli2 and markdown-link-check versions. |
+| `scripts/gnn_conformance.py` | `code` | The pinned GNN conformance check behind ./run.sh gnn. |
+| `scripts/docgen/counts.py` | `code` | Generates and verifies docs/_generated/COUNTS.md. |
+| `.github/GNN.md` | `doc` | Short pointer to what the GNN conformance job parses. |
 | `.github/workflows/docs.yml` | `code` | Docs CI workflow (link check, markdownlint, GNN conformance). |
 | `.github/gnn-pin.json` | `data` | The pinned GNN parser revision the conformance job reads. |
 | `REVIEW_LOG_2026-11-01.md` | `doc` | Dated audit log for the 2026-11-01 CI-currency pass. |
+| `REVIEW_LOG_2026-11-12.md` | `doc` | Dated audit log for the 2026-11-12 gate and docs pass. |
 
 ## Portable tasks
 

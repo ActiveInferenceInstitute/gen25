@@ -23,14 +23,17 @@ public, so please keep the ground rules below in mind.
 
 This repository currently contains metadata and documentation only: the `.aii` sidecar,
 the license, and the repository's documentation files. There is no source code, build
-system, or test suite to run; a lightweight markdown link check runs in CI (see
-[`.github/workflows/docs.yml`](.github/workflows/docs.yml)).
+system, or test suite to run. Everything it verifies runs through one entry point,
+`./run.sh`, and every CI step calls one of its arms — see
+[`docs/RUN_GUIDE.md`](docs/RUN_GUIDE.md).
 
 ## How to contribute
 
 1. Create a branch off `main`: `git checkout -b <your-branch>`.
 2. Make your changes, keeping them scoped and grounded (see ground rules).
-3. Verify relative links in any markdown you touch resolve to real files.
+3. Run the gate: `./run.sh check` while editing, `./run.sh all` before opening the pull
+   request. If you added or removed a file, run `./run.sh counts` and commit the refreshed
+   [docs/_generated/COUNTS.md](docs/_generated/COUNTS.md).
 4. Commit with a clear conventional message (`docs: ...`, `chore: ...`, `fix: ...`).
 5. Open a pull request against `main` and describe what you changed and why.
 

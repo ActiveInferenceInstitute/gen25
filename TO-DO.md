@@ -1,6 +1,6 @@
 # TO-DO — gen25 Documentation Backlog
 
-Date: 2026-08-02 · Last reviewed: 2026-11-11
+Date: 2026-08-02 · Last reviewed: 2026-11-12
 
 Scoping for the docs-deep pass and the ambitious follow-up pass (see
 `REVIEW_LOG_2026-08-02.md` for the full audit trail). The 2026-11-01 CI-currency
@@ -88,6 +88,11 @@ Severity scale:
   `.aii/docs/README.md`, and MD034 in `.aii/README.md`. Broadening the CI glob to
   `**/*.md` requires regenerating those rendered files or fixing the findings first.
   Decide whether to broaden the glob or keep root-only linting.
+  ✓ **Resolved 2026-11-12**: the lint step is now the `lint` arm of `./run.sh` and covers
+  the working tree's `**/*.md`, so CI and a local run use the same scope; the four
+  findings were fixed (two trailing blank lines removed, two bare URLs converted to
+  autolinks) and `**/.venv/**` is excluded because the GNN arm installs its parser
+  there. See `REVIEW_LOG_2026-11-12.md`.
 
 ## Documentation pass 3 (2026-11-11)
 
@@ -126,3 +131,33 @@ the declared `content-data` tier reports 15 pass, **3 fail**, 3 unavailable (the
 - [ ] The three `CORE-INHERIT-*` criteria (`CODEOWNERS`, `CONTRIBUTING`, `SECURITY`)
       need `--github`; offline the checker reports them `unavailable` and the gate exits
       `3`, never claiming a pass.
+
+## Gate and docs pass 4 (2026-11-12)
+
+- [x] One gate entry point: `run.sh` exposes `lint`, `links`, `counts`, `gnn`, `check`,
+      `all` and `measure` as separately runnable arms, and every step in
+      `.github/workflows/docs.yml` calls one of them, so CI holds no second copy of a
+      command. Documented in `docs/RUN_GUIDE.md`. ✓
+- [x] CI de-duplication: the two marketplace Markdown actions became pinned `npx`
+      invocations of the same tools (`scripts/gate_tools.json`), and the GNN job's three
+      inline steps (two `pip` invocations plus an inline heredoc, with a duplicated pin
+      assertion) became one `./run.sh gnn` step over `scripts/gnn_conformance.py`. The
+      pin revision now appears only in `.github/gnn-pin.json`. ✓
+- [x] The link check could not pass: `https://github.com/ActiveInferenceInstitute/InstituteOS`
+      is a private repository, so GitHub answers 404 to unauthenticated clients and the
+      full-tree check reported one dead link. Recorded a reasoned `ignorePatterns` entry
+      in `mlc_config.json` instead of removing the prose link. ✓
+- [x] Measured numbers moved into a generated document: `docs/_generated/COUNTS.md` is
+      written by `scripts/docgen/counts.py` from tracked files, the gate pins and
+      `docs/_generated/timings.json` (recorded by `./run.sh measure`), and
+      `./run.sh counts --check` fails when it is stale. ✓
+- [x] `docs/documentation-index.md` added as the flat index of long-lived documents (the
+      repository had a hub but no flat index), and the hub, `README.md` and `AGENTS.md`
+      now point at the gate and the generated numbers. ✓
+- [ ] The `gnn` arm's wall time is dominated by the interpreter bootstrap and the network:
+      four observations on this host ranged from 11.65 s to 17.08 s. Not treated as a
+      regression; re-measure with `./run.sh measure` before drawing a conclusion from the
+      recorded number.
+- [ ] No manuscript directory exists in this repository, so there is no render path to
+      align with the estate manuscript conventions. Nothing to do until manuscript
+      material is committed here.

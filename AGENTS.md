@@ -28,8 +28,9 @@ when working in this repository. It is part of the repository's documentation; s
    `artifacts:` list in `.aii/config.yaml` and bump `meta.updated`.
 4. **Keep the backlog honest.** Docs work is tracked in `TO-DO.md`
    (Minor / Medium / Major). Review passes append a dated `REVIEW_LOG_<date>.md`.
-5. **Keep the linters green.** CI runs markdown link checks and markdownlint;
-   verify locally before pushing.
+5. **Keep the linters green.** `./run.sh check` must pass before a commit; run
+   `./run.sh all` before opening a pull request. Both arms and the GNN check are
+   documented in [`docs/RUN_GUIDE.md`](docs/RUN_GUIDE.md).
 
 ## Conventions
 
@@ -37,21 +38,26 @@ when working in this repository. It is part of the repository's documentation; s
 - Docs changes must be accurate and concise; prefer targeted edits over gratuitous
   churn.
 - Commit to `main` only after local verification passes.
+- **Add a check in `run.sh`, never in the workflow.** Every CI step is a `./run.sh` arm,
+  so the workflow must never carry a second copy of a command.
+- **Never hand-write a number a script can produce.** Counts, gate pins and arm wall times
+  live in [`docs/_generated/COUNTS.md`](docs/_generated/COUNTS.md); refresh it with
+  `./run.sh counts` after changing tracked files, `scripts/gate_tools.json` or the timings,
+  and re-measure with `./run.sh measure`.
 
 ## Local verification
 
 ```sh
-npx --yes markdownlint-cli2 "**/*.md"
-npx --yes markdown-link-check -q -c mlc_config.json README.md
+./run.sh check   # generated counts, markdownlint over the working tree, link check
+./run.sh all     # the same, plus the pinned GNN conformance arm
 ```
 
-The link check reads `mlc_config.json` from the repository root. In CI the link check
-covers every Markdown file, but the `markdownlint-cli2-action` step runs with the
-action's default glob (`*.{md,markdown}`), so only the repository-root Markdown is
-linted; `docs/` and `.aii/` are not. Use the recursive local command above to lint every
-page. The workflow also runs a pinned GNN conformance job (see
-[`docs/gnn-conformance.md`](docs/gnn-conformance.md)); there is no code, build or test
-suite to run.
+The Node tools are pinned in [`scripts/gate_tools.json`](scripts/gate_tools.json) and
+fetched by `npx`; the `gnn` arm bootstraps its own interpreter in `.venv/gnn`. There is
+no type checker and no test suite to run: this repository carries documentation and
+sidecar metadata only, so `./run.sh all` is the complete gate. CI runs the same arms —
+the `markdown-link-check` job (a required status-check context) runs `links`, `lint` and
+`counts --check`, and `gnn-conformance` (`gnn conformance (pinned)`) runs `gnn`.
 
 ## Documentation maintenance
 
