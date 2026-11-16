@@ -187,6 +187,10 @@ Re-measured 2026-11-12 with the same command: `total: 15 pass, 3 fail, 0 waived,
 - [ ] No manuscript directory exists in this repository, so there is no render path to
       align with the estate manuscript conventions. Nothing to do until manuscript
       material is committed here.
+- [x] The 2026-11-12 fail-closed sentinel regression and its original stub-package
+      design are retained in `REVIEW_LOG_2026-11-12.md`. The current suite instead uses
+      the actual pinned parser and independently checked source admission; historical
+      stub results are not current parser qualification.
 
 ## Maintenance qualification (2026-11-13)
 

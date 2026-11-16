@@ -7,8 +7,9 @@ when working in this repository. It is part of the repository's documentation; s
 ## Repository facts
 
 - Public submodule of the ActiveInferenceInstitute GitHub organization.
-- Contents: documentation, InstituteOS metadata, maintenance Python/shell and offline
-  regressions. No substantive gen25 course or application sources are committed here.
+- Contents: documentation, InstituteOS metadata and maintenance Python/shell.
+  `./run.sh test` covers maintenance and GNN gate regressions; no substantive gen25
+  course or application sources are committed here.
 - License: CC0 1.0 Universal (`LICENSE`); the `.aii` sidecar (`provenance.license`)
   declares the same.
 - Purpose metadata lives in `.aii/config.yaml` (schema: `aii-sidecar/v1`):
@@ -48,18 +49,19 @@ when working in this repository. It is part of the repository's documentation; s
 ## Local verification
 
 ```sh
-./run.sh check   # generated counts, markdownlint over the working tree, link check
+./run.sh check   # generated counts, gate tests, markdownlint over the working tree, link check
 ./run.sh all     # the same, plus the pinned GNN conformance arm
 python3 -B -m unittest discover -s tests -p 'test_maintenance.py' -v
 ```
 
 The Node tools are pinned in [`scripts/gate_tools.json`](scripts/gate_tools.json) and
-fetched by `npx`. There is no type-checker or regression-test arm. Maintenance tests
-need Python, bash and Git; GNN tests additionally need the independently reviewed
-resources and prepared runtimes in [`docs/gnn-conformance.md`](docs/gnn-conformance.md).
+fetched by `npx`. There is no separate type-checker arm. `./run.sh test` runs maintenance
+and GNN regressions. Maintenance tests need Python, bash and Git; GNN tests additionally
+need the independently reviewed resources and prepared runtimes in
+[`docs/gnn-conformance.md`](docs/gnn-conformance.md).
 No-install source proof is not installed-origin, hosted, native or scientific proof.
-CI's `markdown-link-check` job runs `links`, `lint` and `counts --check`; the
-`gnn-conformance` job runs `gnn`. Hosted reviewed-resource delivery remains required.
+CI's `markdown-link-check` job runs `links`, `lint`, `counts --check` and `test`;
+the `gnn-conformance` job runs `gnn`. Hosted reviewed-resource delivery remains required.
 
 ## Documentation maintenance
 

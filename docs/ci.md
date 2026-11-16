@@ -14,12 +14,16 @@ contributor runs locally; the arms and their requirements are in
 
 | Job key | Display name | What it runs |
 | --- | --- | --- |
-| `markdown-link-check` | `markdown-link-check` | `./run.sh links`, `./run.sh lint`, `./run.sh counts --check` (60-minute timeout). |
+| `markdown-link-check` | `markdown-link-check` | `./run.sh links`, `./run.sh lint`, `./run.sh counts --check`, `./run.sh test` (60-minute timeout). |
 | `gnn-conformance` | `gnn conformance (pinned)` | `./run.sh gnn` (15-minute timeout). |
 
 `markdown-link-check` is the repository's **required status-check context**. Its job key
 must not be renamed or removed; a check-run name change would silently wait for a context
 that never reports.
+
+`./run.sh test` runs the `unittest` regression tests in `tests/` with real temporary
+repositories and actual pinned parser/checker calls. It needs independently reviewed
+GNN resources and prepared runtimes; missing prerequisites fail, not skip.
 
 ## Action pins
 
@@ -76,24 +80,20 @@ preserves timings. Use `./run.sh measure` only for authorized new measurements.
 
 ## Offline regressions and GNN delivery
 
-Maintenance tests run separately from current CI arms:
-
-```sh
-python3 -B -m unittest discover -s tests -p 'test_maintenance.py' -v
-```
-
-They need Python, bash, Git and `dirname`, without installation or network.
-`tests/test_gnn_conformance.py` has separate real-source and genuine installed-origin
-selections; see [`gnn-conformance.md`](gnn-conformance.md). The current hosted workflow
-does not yet provision the independently reviewed bootstrap and complete source manifest.
-Local source/installed subset proof does not establish hosted or full-gate acceptance.
+`./run.sh test` includes maintenance controls over real Python, bash, Git and `dirname`
+operations, plus separate real-source and genuine installed-origin GNN selections;
+see [`gnn-conformance.md`](gnn-conformance.md). The current hosted workflow does not
+yet provision the independently reviewed bootstrap, complete source manifest, regression
+model and prepared source/installed runtimes. These are actual hosted prerequisites,
+not substitutes for the required check. Local source/installed subset proof does not
+establish hosted or full-gate acceptance.
 
 ## Run the checks locally
 
 ```sh
-./run.sh check   # counts --check, lint, links: the fast default arm
+./run.sh check   # counts --check, test, lint, links: the fast default arm
 ./run.sh all     # the complete gate, including the pinned GNN arm
 ```
 
-Individual arms (`./run.sh lint`, `./run.sh links`, `./run.sh gnn`) are listed in
+Individual arms (`./run.sh lint`, `./run.sh links`, `./run.sh test`, `./run.sh gnn`) are listed in
 [`RUN_GUIDE.md`](RUN_GUIDE.md).

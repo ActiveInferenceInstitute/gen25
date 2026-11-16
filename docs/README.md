@@ -1,7 +1,7 @@
 # Documentation
 
 Index for gen25's documentation, InstituteOS metadata and maintenance tooling.
-Maintenance Python/shell and offline regressions exist; substantive gen25 course or
+Maintenance Python/shell and gate regressions exist; substantive gen25 course or
 application sources do not. These guides describe repository conventions, metadata,
 maintenance code and CI rather than an implemented gen25 application.
 

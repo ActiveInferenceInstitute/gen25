@@ -26,3 +26,25 @@ The complete gate still needs the actual link check and independently reviewed G
 resources/runtime; hosted resource delivery and network exemplar/provisioning paths
 remain distinct prerequisites. No scientific, installed-runtime, hosted, publication
 or release acceptance follows from a generated-document lint result.
+
+## Ordinary integration with current main
+
+The maintenance source commit `953830c549ac4417cfb1d610178c6ce0ebfd8ee9`
+and current main `e56164b3eb650b434e4a4e0720692e3c570065ca` have distinct
+history. Their ordinary merge retains the independently checked bootstrap, complete
+manifest and guarded parser lifetime while incorporating main's strict `True`
+type-checker acceptance rule, explicit literal-content validation, distinct
+repository/exemplar receipt results and root `test` arm.
+
+The conflicting historical stub suite is replaced by the existing real-parser suite,
+with a negative control that changes only a temporary model's preference dimension
+and requires rejection of the actual checker's warning result `2`. This is an invalid
+software fixture, not a change to the original course model or scientific interpretation.
+Current guides name `GNN_SOURCE_ROOT` and disclose the complete test prerequisites.
+The original 2026-11-12 regression evidence remains verbatim in its dated log.
+
+These edits do not transfer earlier proof to the merged source. Final index-derived
+counts and changed-source checks remain required. Hosted reviewed-resource delivery,
+live links/exemplar acquisition and the separate education migration's missing
+authored course sources remain explicit; no stub, synthetic success status or
+empty education bundle substitutes for them.

@@ -186,7 +186,9 @@ def verify(
                         parsed = parse_gnn_formal(sketch)
                         if parsed is None or getattr(parsed, "parse_errors", None):
                             raise ConformanceError(f"{sketch} did not parse cleanly")
-                        valid, errors = validate_gnn_syntax(sketch.read_text(encoding="utf-8"))
+                        valid, errors = validate_gnn_syntax(
+                            sketch.read_text(encoding="utf-8"), is_content=True
+                        )
                         if not valid:
                             raise ConformanceError(f"{sketch} syntax errors: {errors!r}")
                     with tempfile.TemporaryDirectory(prefix=prefix) as output_dir:
@@ -196,10 +198,14 @@ def verify(
                             shutil.copy2(sketch, model_dir / f"{index:03d}_{sketch.name}")
                         # A spawned interpreter would not inherit this admission.
                         # The producer's one-worker path runs in this process.
-                        if not GNNTypeChecker().validate_gnn_files(
+                        outcome = GNNTypeChecker().validate_gnn_files(
                             model_dir, Path(output_dir), file_workers=1
-                        ):
-                            raise ConformanceError("GNN type checker rejected the checked sketches")
+                        )
+                        if outcome is not True:
+                            raise ConformanceError(
+                                "GNN type checker did not accept the checked sketches "
+                                f"(returned {outcome!r})"
+                            )
                     return len(sketches)
 
                 sketches = repository_sketches(root)
@@ -224,7 +230,11 @@ def verify(
             "models": models,
             "source": source,
             "qualification": qualification,
-            "result": "verified",
+            "result": (
+                "repository-content-passed"
+                if source == "repository"
+                else "pinned-exemplar-baseline-passed"
+            ),
         }
     return receipt
 

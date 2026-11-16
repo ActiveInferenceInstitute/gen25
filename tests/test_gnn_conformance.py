@@ -106,7 +106,7 @@ class GNNWorkspace(TemporaryWorkspace):
                 payload = json.loads(line)
             except ValueError:
                 continue
-            if isinstance(payload, dict) and payload.get("result") == "verified":
+            if isinstance(payload, dict) and payload.get("result") == "repository-content-passed":
                 receipts.append(payload)
         self.assertEqual(len(receipts), 1, result.stdout)
         receipt = receipts[0]
@@ -132,7 +132,8 @@ class GNNWorkspace(TemporaryWorkspace):
     def rejected(self, result, reason):
         self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
         self.assertIn(reason, result.stderr)
-        self.assertNotIn('"result": "verified"', result.stdout)
+        self.assertNotIn('"result": "repository-content-passed"', result.stdout)
+        self.assertNotIn('"result": "pinned-exemplar-baseline-passed"', result.stdout)
         self.assertFalse(self.marker.exists(), "unchecked producer code executed")
 
     def marker_statement(self) -> bytes:
@@ -140,6 +141,14 @@ class GNNWorkspace(TemporaryWorkspace):
 
 
 class SourceAdmissionTests(GNNWorkspace):
+    def test_real_dimension_mismatch_cannot_pass_with_checker_result_two(self) -> None:
+        content = self.sketch.read_text(encoding="utf-8")
+        self.sketch.write_text(
+            content.replace("C[3,type=float]", "C[4,type=float]", 1),
+            encoding="utf-8",
+        )
+        self.rejected(self.gate(), "returned 2")
+
     def test_direct_api_keeps_every_real_gnn_call_inside_qualified_lifetime(self) -> None:
         record = self.workspace / "lifetime.json"
         environment = dict(self.environment, GNN_TEST_RECORD=str(record))

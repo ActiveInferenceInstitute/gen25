@@ -39,12 +39,14 @@ selected `gnn` package root and reports `origin.kind=explicit-source` and
 
 - **Repository sketches.** If the working tree contains any `*.gnn.md` file, each one is
   parsed with `parse_gnn_formal`, syntax-validated with `validate_gnn_syntax`, and the
-  collected sketches are type-checked with `GNNTypeChecker`. The receipt reports
-  `"source": "repository"`.
+  collected sketches are type-checked with `GNNTypeChecker`, which must return exactly
+  `True` (it returns `2` for invalid files or when no files are found, and `False` on a
+  hard failure; anything but `True` fails the arm). The receipt reports
+  `"source": "repository"` and `"result": "repository-content-passed"`.
 - **Pinned exemplar (fallback).** When there is no sketch yet, the arm fetches
   `input/gnn_files/basics/static_perception.md` from the pinned revision, parses it,
-  syntax-validates it and type-checks it, and reports `"source": "pinned-exemplar"`. This
-  is a pipeline and pin conformance baseline — **not** a claim that gen25 already contains
+  syntax-validates it and type-checks it, and reports `"source": "pinned-exemplar"` and
+  `"result": "pinned-exemplar-baseline-passed"`. This is a pipeline and pin conformance baseline — **not** a claim that gen25 already contains
   a GNN model.
 
 The script emits its actual JSON receipt after lifetime exit checks. Its nested
@@ -60,7 +62,7 @@ not qualification evidence.
 
 Set `GNN_BOOTSTRAP` and `GNN_SOURCE_MANIFEST` to independently reviewed resources
 matching the script's frozen digests. For offline source qualification also set
-`GNN_ORIGIN_MODE=source`, `GNN_PACKAGE_ROOT` to the complete selected `gnn` package,
+`GNN_ORIGIN_MODE=source`, `GNN_SOURCE_ROOT` to the complete selected `gnn` package,
 and `GNN_PYTHON` to a prepared interpreter, then use `./run.sh gnn --no-install`.
 With no repository sketches, the ordinary gate still needs its pinned remote exemplar;
 source-mode regression fixtures instead stage actual local sketches. Do not advertise
@@ -74,8 +76,11 @@ delivery remains a separate hosted prerequisite.
 
 ## Offline regression selections
 
-`tests/test_maintenance.py` covers interpreter selection and tracked-only counts.
-`tests/test_gnn_conformance.py` uses real files, processes and parser/checker calls:
+`./run.sh test` runs both regression files. `tests/test_maintenance.py` covers
+interpreter selection and tracked-only counts. `tests/test_gnn_conformance.py` uses
+real files, processes and parser/checker calls, including rejection of a genuine
+dimension-inconsistent model when the checker returns `2`, not a substitute parser.
+For separately scoped source and installed controls:
 
 ```sh
 python -B -m unittest discover -s tests -p test_gnn_conformance.py -k SourceAdmissionTests -v

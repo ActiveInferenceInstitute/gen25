@@ -24,9 +24,8 @@ public, so please keep the ground rules below in mind.
 This repository contains documentation, the `.aii` sidecar and maintenance Python/shell,
 with regressions in `tests/test_maintenance.py` and `tests/test_gnn_conformance.py`.
 It has no substantive gen25 course or application sources. CI uses `./run.sh`;
-maintenance regressions run separately with
-`python3 -B -m unittest discover -s tests -p 'test_maintenance.py' -v`.
-The GNN tests require reviewed inputs and prepared runtimes, not implicit installation.
+`./run.sh test` runs both regression files. GNN tests require independently reviewed
+inputs and prepared runtimes, not a substitute parser or implicit installation.
 See [`docs/RUN_GUIDE.md`](docs/RUN_GUIDE.md) and
 [`docs/gnn-conformance.md`](docs/gnn-conformance.md).
 

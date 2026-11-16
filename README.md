@@ -14,8 +14,8 @@ lists gen25 in the open-source projects family as a project materials repository
 
 This repository holds documentation, InstituteOS metadata and maintenance Python/shell
 code. Substantive gen25 course or application sources are not committed here. CI checks
-Markdown links and lint and runs a pinned GNN conformance arm; offline regressions
-live in `tests/`.
+Markdown links and lint, runs the gate's regression tests and a pinned GNN conformance
+arm. Real-parser regressions require the reviewed resources described below.
 
 ## Contents
 
@@ -24,9 +24,9 @@ live in `tests/`.
 | `README.md` | This file — repository orientation. |
 | `docs/README.md` | [Documentation index](docs/README.md). |
 | `docs/RUN_GUIDE.md` | [Gate and run guide](docs/RUN_GUIDE.md) — the `run.sh` arms CI calls. |
-| `run.sh` | Single gate entry point: `lint`, `links`, `counts`, `gnn`, `check`, `all`, `measure`. |
+| `run.sh` | Single gate entry point: `lint`, `links`, `counts`, `test`, `gnn`, `check`, `all`, `measure`. |
 | `scripts/` | Gate implementation: the pinned GNN check, the counts generator, the tool pins. |
-| `tests/` | Maintenance interpreter/inventory and real-file/process GNN admission regressions. |
+| `tests/` | Maintenance interpreter/inventory and real-file/process GNN admission regressions, run by `./run.sh test`. |
 | `docs/_generated/` | [Generated](docs/_generated/COUNTS.md) counts, gate pins and arm wall times. |
 | `AGENTS.md` | Working conventions for automated agents and contributors. |
 | `LICENSE` | CC0 1.0 Universal public-domain dedication. |
@@ -43,18 +43,14 @@ live in `tests/`.
 CI checks run through one gate entry point, and every CI step calls one of its arms:
 
 ```sh
-./run.sh check   # generated counts, markdownlint, link check — the fast arm
+./run.sh check   # generated counts, gate tests, markdownlint, link check — the fast arm
 ./run.sh all     # the complete gate, including the pinned GNN conformance arm
 ```
 
-There is no type-checker or regression-test arm. Run maintenance regressions separately:
-
-```sh
-python3 -B -m unittest discover -s tests -p 'test_maintenance.py' -v
-```
-
-GNN regression inputs, explicit no-install source mode and genuine installed-origin
-qualification are separate requirements in [docs/gnn-conformance.md](docs/gnn-conformance.md).
+There is no separate type-checker arm. `./run.sh test` runs maintenance and real-parser
+GNN regressions without network or implicit installation. Independently reviewed GNN
+inputs, explicit no-install source mode and genuine installed-origin qualification
+are separate requirements in [docs/gnn-conformance.md](docs/gnn-conformance.md).
 Source acceptance is not hosted, native-backend or scientific acceptance.
 The arms and CI mapping are in [docs/RUN_GUIDE.md](docs/RUN_GUIDE.md); generated counts
 and historical timings remain in [docs/_generated/COUNTS.md](docs/_generated/COUNTS.md).
@@ -81,9 +77,9 @@ modular pages are:
 | [docs/gnn-conformance.md](docs/gnn-conformance.md) | the pinned GNN conformance arm and its pin file |
 | [docs/review-process.md](docs/review-process.md) | backlog severities, review logs and verification |
 
-CI keeps the documentation honest: its `markdown-link-check` job runs the `links`, `lint`
-and `counts --check` arms and its `gnn-conformance` job (`gnn conformance (pinned)`) runs
-the `gnn` arm, on every push to `main` and on every pull request. The workflow
+CI keeps the documentation honest: its `markdown-link-check` job runs the `links`, `lint`,
+`counts --check` and `test` arms and its `gnn-conformance` job (`gnn conformance
+(pinned)`) runs the `gnn` arm, on every push to `main` and on every pull request. The workflow
 deliberately has no path filter, so the checks report a verdict on every tip even when a
 change touches no Markdown.
 

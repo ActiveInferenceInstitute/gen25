@@ -42,13 +42,12 @@ and the verification performed. Review logs:
 ## Verification before a commit
 
 ```sh
-python3 -B -m unittest discover -s tests -p 'test_maintenance.py' -v
 ./run.sh all
 ```
 
-Run regressions separately from the existing CI gate. `./run.sh all` contains the
-generated-counts check, Markdown lint, link check and pinned GNN arm; `check` is its
-fast subset. GNN source/installed tests require reviewed resources and real prepared
+`./run.sh all` contains the generated-counts check, regression tests, Markdown lint,
+link check and pinned GNN arm; `check` omits only the final GNN arm.
+GNN source/installed tests require independently reviewed resources and real prepared
 runtimes; link/exemplar/provisioning paths may need network.
 See [`RUN_GUIDE.md`](RUN_GUIDE.md) and [`gnn-conformance.md`](gnn-conformance.md).
 

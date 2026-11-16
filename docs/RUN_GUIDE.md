@@ -6,7 +6,7 @@ local run and CI execute the same command; the workflow holds no second copy of 
 Change a check in `run.sh`, never in the workflow.
 
 ```sh
-./run.sh check   # fast default arm: generated-counts check, lint, links
+./run.sh check   # fast default arm: generated-counts check, tests, lint, links
 ./run.sh all     # the complete gate: check + the pinned GNN conformance arm
 ```
 
@@ -17,20 +17,18 @@ Change a check in `run.sh`, never in the workflow.
 | `./run.sh lint` | `markdownlint-cli2` over the working tree's Markdown | After editing prose. |
 | `./run.sh links` | `markdown-link-check` over every tracked Markdown file with [`mlc_config.json`](../mlc_config.json) | After editing a link or adding a page. |
 | `./run.sh counts` | Regenerates [`_generated/COUNTS.md`](_generated/COUNTS.md); `--check` verifies it instead of writing | After changing tracked files, the gate tool pins or the arm timings. |
+| `./run.sh test` | The gate's own regression tests, stdlib `unittest` over `tests/` | After changing a gate script or the acceptance rule it enforces. |
 | `./run.sh gnn` | Pinned GNN conformance — see [`gnn-conformance.md`](gnn-conformance.md) | After touching a `*.gnn.md` sketch or the pin. |
-| `./run.sh check` | `counts --check`, then `lint`, then `links` | Before every commit: the fast arm. |
+| `./run.sh check` | `counts --check`, then `test`, then `lint`, then `links` | Before every commit: the fast arm. |
 | `./run.sh all` | `check`, then `gnn` | Before opening a pull request. |
 | `./run.sh measure` | Runs `lint`, `links` and `gnn` once each and records [`_generated/timings.json`](_generated/timings.json) | After changing what an arm does. |
 
-There is no type-checker or regression-test arm. Run maintenance regressions separately:
-
-```sh
-python3 -B -m unittest discover -s tests -p 'test_maintenance.py' -v
-```
-
-They need Python, bash, Git and `dirname`; they use real temporary files and Git
-indexes without installation or network. The separate GNN regressions require the
-reviewed resources and prepared runtimes in [`gnn-conformance.md`](gnn-conformance.md).
+There is no separate type-checker arm. `./run.sh test` runs the maintenance and GNN
+regressions with real temporary files, Git indexes, processes and pinned parser/checker
+calls. The checker must return exactly `True`, not the warning result `2`.
+Tests run offline without implicit installation, but require Python, bash, Git,
+`dirname` and the reviewed GNN resources and prepared runtimes documented in
+[`gnn-conformance.md`](gnn-conformance.md). Missing resources fail rather than skip.
 
 The `links` arm checks the **tracked** file list rather than walking the checkout. That
 keeps a local run identical to CI and keeps it away from `.venv/gnn`, where the GNN arm
@@ -42,7 +40,7 @@ ignored in [`.markdownlint-cli2.yaml`](../.markdownlint-cli2.yaml).
 
 | Workflow job | Display name | Arms |
 | --- | --- | --- |
-| `markdown-link-check` | `markdown-link-check` (required status-check context) | `links`, `lint`, `counts --check` |
+| `markdown-link-check` | `markdown-link-check` (required status-check context) | `links`, `lint`, `counts --check`, `test` |
 | `gnn-conformance` | `gnn conformance (pinned)` | `gnn` |
 
 [`ci.md`](ci.md) records the workflow's action pins, its Python setup and the
@@ -55,6 +53,7 @@ the required context.
 | --- | --- |
 | `lint`, `links` | `node`/`npx`, `git`, `python3` (reads the tool pins) |
 | `counts` | `python3`, `git` |
+| `test` | Python, bash, Git, `dirname`; independently reviewed GNN resources and prepared source/installed runtimes |
 | `gnn` | Prepared Python and reviewed bootstrap/manifest; default provisioning or exemplar acquisition also needs network/`uv` |
 
 The Node tools are pinned in [`../scripts/gate_tools.json`](../scripts/gate_tools.json)
@@ -65,7 +64,7 @@ directory and non-executable selections fail before default bootstrap.
 `GNN_PYTHON_VERSION` chooses the bootstrap version; CI selects `3.12`.
 `--no-install` prohibits parser installation, not missing-interpreter bootstrap:
 for strictly offline use, select an existing interpreter explicitly and supply all
-reviewed inputs. Source mode also requires explicit `GNN_PACKAGE_ROOT`.
+reviewed inputs. Source mode also requires explicit `GNN_SOURCE_ROOT`.
 See [`gnn-conformance.md`](gnn-conformance.md); hosted resource delivery is not yet proved.
 
 ## Measured numbers
