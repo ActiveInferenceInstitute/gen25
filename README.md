@@ -12,9 +12,10 @@ research-category repository whose declared capability is **documentation**. The
 Institute's public [open-source map](https://activeinference.institute/knowledge/)
 lists gen25 in the open-source projects family as a project materials repository.
 
-This repository holds documentation and InstituteOS metadata only: there is no source
-code, build system or test suite. Its CI checks Markdown links and lint, and runs a
-pinned GNN conformance check.
+This repository holds documentation, InstituteOS metadata and maintenance Python/shell
+code. Substantive gen25 course or application sources are not committed here. CI checks
+Markdown links and lint and runs a pinned GNN conformance arm; offline regressions
+live in `tests/`.
 
 ## Contents
 
@@ -25,6 +26,7 @@ pinned GNN conformance check.
 | `docs/RUN_GUIDE.md` | [Gate and run guide](docs/RUN_GUIDE.md) — the `run.sh` arms CI calls. |
 | `run.sh` | Single gate entry point: `lint`, `links`, `counts`, `gnn`, `check`, `all`, `measure`. |
 | `scripts/` | Gate implementation: the pinned GNN check, the counts generator, the tool pins. |
+| `tests/` | Maintenance interpreter/inventory and real-file/process GNN admission regressions. |
 | `docs/_generated/` | [Generated](docs/_generated/COUNTS.md) counts, gate pins and arm wall times. |
 | `AGENTS.md` | Working conventions for automated agents and contributors. |
 | `LICENSE` | CC0 1.0 Universal public-domain dedication. |
@@ -38,19 +40,24 @@ pinned GNN conformance check.
 
 ## Gate
 
-Everything this repository verifies runs through one entry point, and every CI step calls
-one of its arms:
+CI checks run through one gate entry point, and every CI step calls one of its arms:
 
 ```sh
 ./run.sh check   # generated counts, markdownlint, link check — the fast arm
 ./run.sh all     # the complete gate, including the pinned GNN conformance arm
 ```
 
-There is no type-checker or test-suite arm because the repository has no source code and
-no test suite. The arms, their requirements, the CI job mapping and the measurement
-protocol are documented in [docs/RUN_GUIDE.md](docs/RUN_GUIDE.md); measured counts and arm
-wall times live only in the generated
-[docs/_generated/COUNTS.md](docs/_generated/COUNTS.md).
+There is no type-checker or regression-test arm. Run maintenance regressions separately:
+
+```sh
+python3 -B -m unittest discover -s tests -p 'test_maintenance.py' -v
+```
+
+GNN regression inputs, explicit no-install source mode and genuine installed-origin
+qualification are separate requirements in [docs/gnn-conformance.md](docs/gnn-conformance.md).
+Source acceptance is not hosted, native-backend or scientific acceptance.
+The arms and CI mapping are in [docs/RUN_GUIDE.md](docs/RUN_GUIDE.md); generated counts
+and historical timings remain in [docs/_generated/COUNTS.md](docs/_generated/COUNTS.md).
 
 ## Inventory
 

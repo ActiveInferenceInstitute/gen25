@@ -1,6 +1,6 @@
 # TO-DO — gen25 Documentation Backlog
 
-Date: 2026-08-02 · Last reviewed: 2026-11-12
+Date: 2026-08-02 · Last reviewed: 2026-11-13
 
 Scoping for the docs-deep pass and the ambitious follow-up pass (see
 `REVIEW_LOG_2026-08-02.md` for the full audit trail). The 2026-11-01 CI-currency
@@ -74,9 +74,9 @@ Severity scale:
 - [ ] **Education contract migration blocked:** the `gen25` member step in the
       `courses` repository's `docs/workflows/education.md` requires
       `specs/education/gen25.json` for generated course units. `git ls-files`
-      contains no course units or authored learning objectives; `README.md` describes
-      this checkout as documentation and metadata only. Commit the actual generated
-      course sources and their authored objectives before transcribing the bundle.
+      contains no course units or authored learning objectives. Maintenance Python,
+      shell and regression tests are not course content.
+      Commit the actual course sources and authored objectives before transcribing the bundle.
       Do not invent units, reinterpret repository-maintenance guides as courses, or
       publish an empty bundle as completed adoption. See the Education migration
       entry in `REVIEW_LOG_2026-11-12.md`.
@@ -90,11 +90,10 @@ Severity scale:
 
 ## Open / deferred
 
-- Minor: `REVIEW_LOG_2026-08-02.md` is tracked but absent from the `.aii/config.yaml`
-  `artifacts:` list and from the rendered `.aii/docs/INTEGRATION.md` table, both of
-  which register `REVIEW_LOG_2026-11-01.md` and `REVIEW_LOG_2026-11-12.md` only.
-  Owner: whoever next regenerates the sidecar — edit it with the InstituteOS
-  generator so `INTEGRATION.md` is re-rendered, not by hand.
+- Minor: the August review and both maintenance/GNN regression files are registered
+  in `.aii/config.yaml`. Their canonical projections have been regenerated, validated
+  for completeness and applied from the qualified producer output; never hand-edit
+  `INTEGRATION.md`.
 - Major: substantive `docs/` content (architecture notes, usage guides) — deferred
   until real gen25 material exists in this repository.
 - Optional: GitHub topics on the repository. Partially resolved: `active-inference`
@@ -188,3 +187,29 @@ Re-measured 2026-11-12 with the same command: `total: 15 pass, 3 fail, 0 waived,
 - [ ] No manuscript directory exists in this repository, so there is no render path to
       align with the estate manuscript conventions. Nothing to do until manuscript
       material is committed here.
+
+## Maintenance qualification (2026-11-13)
+
+- [x] Explicit interpreter refusal/default behavior and Git-index-only inventory have
+  passed their offline real-shell/real-Git regressions.
+- [x] The unchanged GNN pin now uses checked bootstrap bytes, an independent complete
+  source manifest and guarded parser/checker lifetime. Real-source admission controls
+  and genuine installed-origin/metadata controls passed separately, without installation.
+- [x] Current guides acknowledge maintenance code/tests, security implications and
+  generator-only sidecar ownership; historical review entries above remain historical.
+- [x] The canonical sidecar renderer and completeness validator passed on the actual
+  current metadata, including the August review and regression-file rows. Its exact
+  generated projections are applied; the public README no longer links a private
+  InstituteOS target.
+- [ ] Hosted reviewed-resource delivery, network exemplar/provisioning paths and
+  final admitted-index generated counts remain distinct. No native execution,
+  scientific model, course content, owner-policy choice or publication acceptance
+  follows from these offline subsets.
+- [x] Regenerated all five sidecar projections from updated metadata using the
+  qualified canonical renderer. Generated Markdown passed the pinned linter:
+  bare URLs, trailing blank lines and incorrect `docs[]` path-base guidance are
+  repaired without hand-styling or rule waivers. See
+  [the regeneration review](REVIEW_LOG_2026-11-16.md).
+- [ ] Full documentation acceptance still requires final admitted-index counts,
+  the link check and pinned GNN prerequisites. Earlier failed receipts remain
+  historical evidence, not current producer defects.

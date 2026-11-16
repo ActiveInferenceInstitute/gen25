@@ -1,8 +1,8 @@
 # Documentation pass process
 
-gen25 is maintained as a documentation and metadata repository, so its changes are
-reviewed as documentation changes. This page records the process the repository already
-follows; the audit trail is in the dated review logs.
+gen25 contains documentation, metadata and maintenance Python/shell. Review maintenance
+changes with their offline regressions as well as documentation checks. The audit trail
+remains in the dated review logs.
 
 ## Backlog
 
@@ -21,10 +21,11 @@ documentation is not allowed.
 
 Each documentation pass appends a dated `REVIEW_LOG_<YYYY-MM-DD>.md` recording the
 preflight state, the findings by severity, what was implemented (with commit references),
-and the verification performed. Three logs exist today:
+and the verification performed. Review logs:
 [`../REVIEW_LOG_2026-08-02.md`](../REVIEW_LOG_2026-08-02.md),
-[`../REVIEW_LOG_2026-11-01.md`](../REVIEW_LOG_2026-11-01.md) and
-[`../REVIEW_LOG_2026-11-12.md`](../REVIEW_LOG_2026-11-12.md).
+[`../REVIEW_LOG_2026-11-01.md`](../REVIEW_LOG_2026-11-01.md),
+[`../REVIEW_LOG_2026-11-12.md`](../REVIEW_LOG_2026-11-12.md) and
+[`../REVIEW_LOG_2026-11-16.md`](../REVIEW_LOG_2026-11-16.md).
 
 ## Rules that bind a pass
 
@@ -41,14 +42,16 @@ and the verification performed. Three logs exist today:
 ## Verification before a commit
 
 ```sh
+python3 -B -m unittest discover -s tests -p 'test_maintenance.py' -v
 ./run.sh all
 ```
 
-That is the complete gate: the generated-counts check, markdownlint over the working
-tree, the link check, and the pinned GNN conformance arm. `./run.sh check` is the fast
-subset. The arms are documented in [`RUN_GUIDE.md`](RUN_GUIDE.md); there is no code,
-build or test suite in this repository, so these are the strongest checks available.
+Run regressions separately from the existing CI gate. `./run.sh all` contains the
+generated-counts check, Markdown lint, link check and pinned GNN arm; `check` is its
+fast subset. GNN source/installed tests require reviewed resources and real prepared
+runtimes; link/exemplar/provisioning paths may need network.
+See [`RUN_GUIDE.md`](RUN_GUIDE.md) and [`gnn-conformance.md`](gnn-conformance.md).
 
 Also confirm every internal relative link resolves to a real file, that the `.aii` files
 still parse, and that [`_generated/COUNTS.md`](_generated/COUNTS.md) was refreshed with
-`./run.sh counts` if you added or removed a file.
+`./run.sh counts` after intended additions/removals are admitted to the Git index.

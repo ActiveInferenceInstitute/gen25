@@ -32,9 +32,8 @@ GATE_ARMS = ("lint", "links", "gnn")
 
 def tracked(pattern: str) -> list[str]:
     result = subprocess.run(
-        # Tracked plus untracked-but-not-ignored, so the document is already current
-        # for a page that has been written but not yet staged.
-        ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard", "--", pattern],
+        # Canonical inventory comes from the Git index, never unstaged scratch files.
+        ["git", "ls-files", "-z", "--cached", "--", pattern],
         cwd=ROOT,
         capture_output=True,
         check=True,

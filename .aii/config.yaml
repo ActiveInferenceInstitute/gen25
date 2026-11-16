@@ -1,7 +1,7 @@
 # AII sidecar — InstituteOS metadata. Schema: aii_platform.aii_sidecar
 meta:
   sidecar_version: 1.2.1
-  updated: '2026-11-12'
+  updated: '2026-11-16'
 repo:
   name: gen25
   slug: gen25
@@ -84,6 +84,12 @@ artifacts:
 - path: scripts/docgen/counts.py
   kind: code
   description: Generates and verifies docs/_generated/COUNTS.md.
+- path: tests/test_maintenance.py
+  kind: code
+  description: Offline regression tests for interpreter admission and tracked inventory.
+- path: tests/test_gnn_conformance.py
+  kind: code
+  description: Real-file/process regressions for exact-pin GNN source, lifetime and installed-origin admission.
 - path: .github/GNN.md
   kind: doc
   description: Short pointer to what the GNN conformance job parses.
@@ -93,12 +99,18 @@ artifacts:
 - path: .github/gnn-pin.json
   kind: data
   description: The pinned GNN parser revision the conformance job reads.
+- path: REVIEW_LOG_2026-08-02.md
+  kind: doc
+  description: Dated audit log for the 2026-08-02 documentation pass.
 - path: REVIEW_LOG_2026-11-01.md
   kind: doc
   description: Dated audit log for the 2026-11-01 CI-currency pass.
 - path: REVIEW_LOG_2026-11-12.md
   kind: doc
   description: Dated audit log for the 2026-11-12 gate and docs pass.
+- path: REVIEW_LOG_2026-11-16.md
+  kind: doc
+  description: Dated audit log for canonical sidecar regeneration and retained gate prerequisites.
 provenance:
   license: CC0-1.0
   citation:

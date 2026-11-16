@@ -21,19 +21,23 @@ public, so please keep the ground rules below in mind.
 
 ## What lives here
 
-This repository currently contains metadata and documentation only: the `.aii` sidecar,
-the license, and the repository's documentation files. There is no source code, build
-system, or test suite to run. Everything it verifies runs through one entry point,
-`./run.sh`, and every CI step calls one of its arms — see
-[`docs/RUN_GUIDE.md`](docs/RUN_GUIDE.md).
+This repository contains documentation, the `.aii` sidecar and maintenance Python/shell,
+with regressions in `tests/test_maintenance.py` and `tests/test_gnn_conformance.py`.
+It has no substantive gen25 course or application sources. CI uses `./run.sh`;
+maintenance regressions run separately with
+`python3 -B -m unittest discover -s tests -p 'test_maintenance.py' -v`.
+The GNN tests require reviewed inputs and prepared runtimes, not implicit installation.
+See [`docs/RUN_GUIDE.md`](docs/RUN_GUIDE.md) and
+[`docs/gnn-conformance.md`](docs/gnn-conformance.md).
 
 ## How to contribute
 
 1. Create a branch off `main`: `git checkout -b <your-branch>`.
 2. Make your changes, keeping them scoped and grounded (see ground rules).
-3. Run the gate: `./run.sh check` while editing, `./run.sh all` before opening the pull
-   request. If you added or removed a file, run `./run.sh counts` and commit the refreshed
-   [docs/_generated/COUNTS.md](docs/_generated/COUNTS.md).
+3. Run regressions and appropriate gate arms: `./run.sh check` while editing and
+   `./run.sh all` before the pull request. After the intended additions/removals are
+   admitted to the Git index, run `./run.sh counts` and include the refreshed
+   [docs/_generated/COUNTS.md](docs/_generated/COUNTS.md); do not rewrite timings.
 4. Commit with a clear conventional message (`docs: ...`, `chore: ...`, `fix: ...`).
 5. Open a pull request against `main` and describe what you changed and why.
 

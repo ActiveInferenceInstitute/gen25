@@ -57,11 +57,15 @@
 | `scripts/gate_tools.json` | `data` | Pinned markdownlint-cli2 and markdown-link-check versions. |
 | `scripts/gnn_conformance.py` | `code` | The pinned GNN conformance check behind ./run.sh gnn. |
 | `scripts/docgen/counts.py` | `code` | Generates and verifies docs/_generated/COUNTS.md. |
+| `tests/test_maintenance.py` | `code` | Offline regression tests for interpreter admission and tracked inventory. |
+| `tests/test_gnn_conformance.py` | `code` | Real-file/process regressions for exact-pin GNN source, lifetime and installed-origin admission. |
 | `.github/GNN.md` | `doc` | Short pointer to what the GNN conformance job parses. |
 | `.github/workflows/docs.yml` | `code` | Docs CI workflow (link check, markdownlint, GNN conformance). |
 | `.github/gnn-pin.json` | `data` | The pinned GNN parser revision the conformance job reads. |
+| `REVIEW_LOG_2026-08-02.md` | `doc` | Dated audit log for the 2026-08-02 documentation pass. |
 | `REVIEW_LOG_2026-11-01.md` | `doc` | Dated audit log for the 2026-11-01 CI-currency pass. |
 | `REVIEW_LOG_2026-11-12.md` | `doc` | Dated audit log for the 2026-11-12 gate and docs pass. |
+| `REVIEW_LOG_2026-11-16.md` | `doc` | Dated audit log for canonical sidecar regeneration and retained gate prerequisites. |
 
 ## Portable tasks
 

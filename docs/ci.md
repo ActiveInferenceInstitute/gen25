@@ -70,8 +70,23 @@ and `MD041` (first line must be a heading) with the reasons recorded there, and 
 
 `./run.sh counts --check` fails when
 [`_generated/COUNTS.md`](_generated/COUNTS.md) no longer matches tracked files, the gate's
-pins or the recorded arm timings. Refresh it with `./run.sh counts`; re-measure the timings
-with `./run.sh measure`.
+pins or recorded timings. Inventory uses the Git index, so untracked scratch does not
+change it. Admit intended additions/removals before `./run.sh counts`; regeneration
+preserves timings. Use `./run.sh measure` only for authorized new measurements.
+
+## Offline regressions and GNN delivery
+
+Maintenance tests run separately from current CI arms:
+
+```sh
+python3 -B -m unittest discover -s tests -p 'test_maintenance.py' -v
+```
+
+They need Python, bash, Git and `dirname`, without installation or network.
+`tests/test_gnn_conformance.py` has separate real-source and genuine installed-origin
+selections; see [`gnn-conformance.md`](gnn-conformance.md). The current hosted workflow
+does not yet provision the independently reviewed bootstrap and complete source manifest.
+Local source/installed subset proof does not establish hosted or full-gate acceptance.
 
 ## Run the checks locally
 

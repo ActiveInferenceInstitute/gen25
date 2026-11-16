@@ -13,8 +13,8 @@
 #   ./run.sh all       check, then gnn (the complete gate)
 #   ./run.sh measure   run each arm once and record docs/_generated/timings.json
 #
-# There is no type-checker or test-suite arm: this repository carries documentation
-# and sidecar metadata only. See docs/RUN_GUIDE.md.
+# There is no type-checker or regression-test arm. Run offline regressions
+# separately; see docs/RUN_GUIDE.md.
 set -euo pipefail
 
 ROOT="$(CDPATH='' cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
@@ -30,8 +30,8 @@ MARKDOWN_GIT_PATHSPEC='*.md'
 usage() {
   printf "usage: ./run.sh ARM\n\n"
   sed -n '/^#   \.\/run\.sh /p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
-  printf "\nNo type-checker or test-suite arm: this repository carries documentation\n"
-  printf "and sidecar metadata only. See docs/RUN_GUIDE.md.\n"
+  printf "\nNo type-checker or regression-test arm. Run offline regressions separately;\n"
+  printf "see docs/RUN_GUIDE.md.\n"
 }
 
 require() {
@@ -76,13 +76,18 @@ arm_counts() {
 }
 
 arm_gnn() {
-  local python="${GNN_PYTHON:-$ROOT/.venv/gnn/bin/python}"
-  if [ ! -x "$python" ]; then
+  local python="${GNN_PYTHON-$ROOT/.venv/gnn/bin/python}"
+  if [ "${GNN_PYTHON+x}" = x ]; then
+    if [ ! -f "$python" ] || [ ! -x "$python" ]; then
+      echo "run.sh: GNN_PYTHON is not an executable file: $python" >&2
+      return 1
+    fi
+  elif [ ! -x "$python" ]; then
     require uv
     uv venv --no-project --seed --python "${GNN_PYTHON_VERSION:-3.12}" \
       "$ROOT/.venv/gnn" >&2
   fi
-  "$python" "$ROOT/scripts/gnn_conformance.py"
+  "$python" "$ROOT/scripts/gnn_conformance.py" "$@"
 }
 
 arm_measure() {
