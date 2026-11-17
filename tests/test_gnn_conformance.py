@@ -16,8 +16,10 @@ import marshal
 import os
 from pathlib import Path
 import shutil
+import errno
 import struct
 import sys
+import tempfile
 import textwrap
 import unittest
 
@@ -43,13 +45,64 @@ class GNNWorkspace(TemporaryWorkspace):
         cls.producer_manifest = inputs["GNN_SOURCE_MANIFEST"]
         cls.producer_package = inputs["GNN_TEST_SOURCE_ROOT"]
         cls.producer_spec = inputs["GNN_TEST_SPEC"]
+        checked_blobs = {}
         for path, digest in (
             (cls.producer_bootstrap, BOOTSTRAP_SHA256),
             (cls.producer_manifest, MANIFEST_SHA256),
             (cls.producer_spec, SPEC_SHA256),
         ):
-            if hashlib.sha256(path.read_bytes()).hexdigest() != digest:
+            payload = path.read_bytes()
+            if hashlib.sha256(payload).hexdigest() != digest:
                 raise RuntimeError(f"{path.name} is not the frozen qualified producer input")
+            checked_blobs[path] = payload
+        cls._bootstrap_bytes = checked_blobs[cls.producer_bootstrap]
+        cls._manifest_bytes = checked_blobs[cls.producer_manifest]
+        cls._spec_bytes = checked_blobs[cls.producer_spec]
+        cls._manifest_files = json.loads(cls._manifest_bytes)["files"]
+        stage = tempfile.TemporaryDirectory(prefix="gen25 gnn stage ")
+        cls.addClassCleanup(stage.cleanup)
+        cls._clean_package = Path(stage.name).resolve() / "gnn"
+        shutil.copytree(
+            cls.producer_package,
+            cls._clean_package,
+            symlinks=True,
+            ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo"),
+        )
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        try:
+            for relative, digest in cls._manifest_files.items():
+                member = cls._clean_package / relative.removeprefix("src/gnn/")
+                if hashlib.sha256(member.read_bytes()).hexdigest() != digest:
+                    raise AssertionError(f"staged package member mutated across tests: {relative}")
+        finally:
+            super().tearDownClass()
+
+    @staticmethod
+    def _link_or_copy(source: str, destination: str) -> None:
+        try:
+            os.link(source, destination)
+        except OSError as exc:
+            if exc.errno != errno.EXDEV:
+                raise
+            shutil.copy2(source, destination)
+
+    @classmethod
+    def clone_package(cls, source: Path, destination: Path) -> None:
+        shutil.copytree(
+            source,
+            destination,
+            symlinks=True,
+            ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo"),
+            copy_function=cls._link_or_copy,
+        )
+        for mutable in ("__init__.py", "parsers/basic.py", "README.md"):
+            member = destination / mutable
+            if member.is_file():
+                payload = member.read_bytes()
+                member.unlink()
+                member.write_bytes(payload)
 
     def setUp(self) -> None:
         super().setUp()
@@ -65,21 +118,17 @@ class GNNWorkspace(TemporaryWorkspace):
         resources.mkdir()
         self.bootstrap = resources / "gnn_bootstrap.py"
         self.manifest = resources / "source-manifest.json"
-        shutil.copy2(self.producer_bootstrap, self.bootstrap)
-        shutil.copy2(self.producer_manifest, self.manifest)
+        self.bootstrap.write_bytes(self._bootstrap_bytes)
+        self.manifest.write_bytes(self._manifest_bytes)
         self.package = self.workspace / "selected source" / "src" / "gnn"
-        shutil.copytree(
-            self.producer_package,
-            self.package,
-            symlinks=True,
-            ignore=shutil.ignore_patterns("__pycache__", "*.pyc", "*.pyo"),
-        )
+        if type(self) is SourceAdmissionTests:
+            self.clone_package(self._clean_package, self.package)
         models = self.repo / "models"
         models.mkdir()
         self.sketch = models / "first.gnn.md"
-        shutil.copy2(self.producer_spec, self.sketch)
+        self.sketch.write_bytes(self._spec_bytes)
         # Two real inputs exercise the checker's collection/worker selection.
-        shutil.copy2(self.producer_spec, models / "second.gnn.md")
+        (models / "second.gnn.md").write_bytes(self._spec_bytes)
         self.marker = self.workspace / "unchecked execution"
         self.arguments = [
             "--bootstrap", str(self.bootstrap),
@@ -352,7 +401,7 @@ class SourceAdmissionTests(GNNWorkspace):
 
     def test_explicit_source_uses_its_selected_artifact_not_ambient_gnn(self) -> None:
         foreign = self.workspace / "ambient source" / "gnn"
-        shutil.copytree(self.package, foreign)
+        self.clone_package(self.package, foreign)
         with (foreign / "__init__.py").open("ab") as handle:
             handle.write(self.marker_statement())
         environment = dict(self.environment, PYTHONPATH=str(foreign.parent))
