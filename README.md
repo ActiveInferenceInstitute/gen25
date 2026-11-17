@@ -12,10 +12,10 @@ research-category repository whose declared capability is **documentation**. The
 Institute's public [open-source map](https://activeinference.institute/knowledge/)
 lists gen25 in the open-source projects family as a project materials repository.
 
-This repository holds documentation, InstituteOS metadata and the gate tooling that
-keeps them honest: there is no application source code and no build system. Its CI checks
-Markdown links and lint, runs a pinned GNN conformance check, and runs the gate's own
-regression tests.
+This repository holds documentation, InstituteOS metadata and maintenance Python/shell
+code. Substantive gen25 course or application sources are not committed here. CI checks
+Markdown links and lint, runs the gate's regression tests and a pinned GNN conformance
+arm. Real-parser regressions require the reviewed resources described below.
 
 ## Contents
 
@@ -26,7 +26,7 @@ regression tests.
 | `docs/RUN_GUIDE.md` | [Gate and run guide](docs/RUN_GUIDE.md) — the `run.sh` arms CI calls. |
 | `run.sh` | Single gate entry point: `lint`, `links`, `counts`, `test`, `gnn`, `check`, `all`, `measure`. |
 | `scripts/` | Gate implementation: the pinned GNN check, the counts generator, the tool pins. |
-| `tests/` | Regression tests for the gate script, run by `./run.sh test`. |
+| `tests/` | Maintenance interpreter/inventory and real-file/process GNN admission regressions, run by `./run.sh test`. |
 | `docs/_generated/` | [Generated](docs/_generated/COUNTS.md) counts, gate pins and arm wall times. |
 | `AGENTS.md` | Working conventions for automated agents and contributors. |
 | `LICENSE` | CC0 1.0 Universal public-domain dedication. |
@@ -40,20 +40,20 @@ regression tests.
 
 ## Gate
 
-Everything this repository verifies runs through one entry point, and every CI step calls
-one of its arms:
+CI checks run through one gate entry point, and every CI step calls one of its arms:
 
 ```sh
 ./run.sh check   # generated counts, gate tests, markdownlint, link check — the fast arm
 ./run.sh all     # the complete gate, including the pinned GNN conformance arm
 ```
 
-There is no type-checker arm. `./run.sh test` runs the gate's own regression tests, which
-assert the acceptance rules its scripts enforce in a throwaway repository with a stubbed
-parser, so they need no network. The arms, their requirements, the CI job mapping and the
-measurement protocol are documented in [docs/RUN_GUIDE.md](docs/RUN_GUIDE.md); measured
-counts and arm wall times live only in the generated
-[docs/_generated/COUNTS.md](docs/_generated/COUNTS.md).
+There is no separate type-checker arm. `./run.sh test` runs maintenance and real-parser
+GNN regressions without network or implicit installation. Independently reviewed GNN
+inputs, explicit no-install source mode and genuine installed-origin qualification
+are separate requirements in [docs/gnn-conformance.md](docs/gnn-conformance.md).
+Source acceptance is not hosted, native-backend or scientific acceptance.
+The arms and CI mapping are in [docs/RUN_GUIDE.md](docs/RUN_GUIDE.md); generated counts
+and historical timings remain in [docs/_generated/COUNTS.md](docs/_generated/COUNTS.md).
 
 ## Inventory
 

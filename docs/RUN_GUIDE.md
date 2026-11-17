@@ -23,12 +23,12 @@ Change a check in `run.sh`, never in the workflow.
 | `./run.sh all` | `check`, then `gnn` | Before opening a pull request. |
 | `./run.sh measure` | Runs `lint`, `links` and `gnn` once each and records [`_generated/timings.json`](_generated/timings.json) | After changing what an arm does. |
 
-There is deliberately no type-checker arm: this repository contains documentation and
-InstituteOS metadata, not an application. The one executable suite is `./run.sh test`,
-which covers the gate's own acceptance logic — for example that the pinned GNN type
-checker must return exactly `True` and not the truthy-adjacent `2`. Each test builds a
-throwaway repository with a stubbed `gnn` package, so the arm needs no network and no
-parser install. `./run.sh all` is therefore the complete gate.
+There is no separate type-checker arm. `./run.sh test` runs the maintenance and GNN
+regressions with real temporary files, Git indexes, processes and pinned parser/checker
+calls. The checker must return exactly `True`, not the warning result `2`.
+Tests run offline without implicit installation, but require Python, bash, Git,
+`dirname` and the reviewed GNN resources and prepared runtimes documented in
+[`gnn-conformance.md`](gnn-conformance.md). Missing resources fail rather than skip.
 
 The `links` arm checks the **tracked** file list rather than walking the checkout. That
 keeps a local run identical to CI and keeps it away from `.venv/gnn`, where the GNN arm
@@ -53,16 +53,19 @@ the required context.
 | --- | --- |
 | `lint`, `links` | `node`/`npx`, `git`, `python3` (reads the tool pins) |
 | `counts` | `python3`, `git` |
-| `test` | `python3` (stdlib only; no network, no GNN install) |
-| `gnn` | `python3`, `uv` (creates `.venv/gnn`), network access |
+| `test` | Python, bash, Git, `dirname`; independently reviewed GNN resources and prepared source/installed runtimes |
+| `gnn` | Prepared Python and reviewed bootstrap/manifest; default provisioning or exemplar acquisition also needs network/`uv` |
 
 The Node tools are pinned in [`../scripts/gate_tools.json`](../scripts/gate_tools.json)
-and are fetched by `npx`; that file is the only place their versions appear. The `gnn`
-arm creates a seeded interpreter in `.venv/gnn` (git-ignored) and installs the pinned
-parser there. Override the interpreter with `GNN_PYTHON=/path/to/python` (existing
-environment, no bootstrap) or `GNN_PYTHON_VERSION=3.12` (version to bootstrap). CI sets
-`GNN_PYTHON_VERSION` to `3.12`; the job installs that interpreter with the
-organization's `setup-python-uv` composite action.
+and are fetched by `npx`. With `GNN_PYTHON` unset, the `gnn` arm selects its default
+interpreter in `.venv/gnn`, bootstrapping it with `uv` if absent.
+An explicit `GNN_PYTHON` must name an executable regular file: empty, missing,
+directory and non-executable selections fail before default bootstrap.
+`GNN_PYTHON_VERSION` chooses the bootstrap version; CI selects `3.12`.
+`--no-install` prohibits parser installation, not missing-interpreter bootstrap:
+for strictly offline use, select an existing interpreter explicitly and supply all
+reviewed inputs. Source mode also requires explicit `GNN_SOURCE_ROOT`.
+See [`gnn-conformance.md`](gnn-conformance.md); hosted resource delivery is not yet proved.
 
 ## Measured numbers
 
@@ -70,7 +73,9 @@ Numbers that a script can produce are never typed into prose. The gate's wall ti
 the repository's counts live in [`_generated/COUNTS.md`](_generated/COUNTS.md), generated
 from tracked files and from `_generated/timings.json` by
 [`../scripts/docgen/counts.py`](../scripts/docgen/counts.py). `./run.sh check` fails when
-the generated document is stale.
+the generated document is stale. Canonical inventory is the Git index: untracked or
+ignored scratch does not count. Admit intended additions/removals before final
+generation. Inventory regeneration preserves the recorded timing values.
 
 `./run.sh measure` records one run per arm on the machine that runs it, with the tool
 caches warm and `.venv/gnn` removed first so the GNN arm bootstraps its interpreter and

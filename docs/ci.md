@@ -21,9 +21,9 @@ contributor runs locally; the arms and their requirements are in
 must not be renamed or removed; a check-run name change would silently wait for a context
 that never reports.
 
-`./run.sh test` runs the stdlib-`unittest` regression tests in `tests/`. They build a
-throwaway repository with a stubbed `gnn` package and assert the gate's own acceptance
-rules, so the required job needs no network and no parser install.
+`./run.sh test` runs the `unittest` regression tests in `tests/` with real temporary
+repositories and actual pinned parser/checker calls. It needs independently reviewed
+GNN resources and prepared runtimes; missing prerequisites fail, not skip.
 
 ## Action pins
 
@@ -74,8 +74,19 @@ and `MD041` (first line must be a heading) with the reasons recorded there, and 
 
 `./run.sh counts --check` fails when
 [`_generated/COUNTS.md`](_generated/COUNTS.md) no longer matches tracked files, the gate's
-pins or the recorded arm timings. Refresh it with `./run.sh counts`; re-measure the timings
-with `./run.sh measure`.
+pins or recorded timings. Inventory uses the Git index, so untracked scratch does not
+change it. Admit intended additions/removals before `./run.sh counts`; regeneration
+preserves timings. Use `./run.sh measure` only for authorized new measurements.
+
+## Offline regressions and GNN delivery
+
+`./run.sh test` includes maintenance controls over real Python, bash, Git and `dirname`
+operations, plus separate real-source and genuine installed-origin GNN selections;
+see [`gnn-conformance.md`](gnn-conformance.md). The current hosted workflow does not
+yet provision the independently reviewed bootstrap, complete source manifest, regression
+model and prepared source/installed runtimes. These are actual hosted prerequisites,
+not substitutes for the required check. Local source/installed subset proof does not
+establish hosted or full-gate acceptance.
 
 ## Run the checks locally
 

@@ -10,8 +10,15 @@ It reads [`gnn-pin.json`](gnn-pin.json), the canonical pin document (schema
 (`8f293d9ba810e6eda5c09842d9c7ed9ffa5f92c1`). The current values are mirrored from the
 pin file into [`../docs/_generated/COUNTS.md`](../docs/_generated/COUNTS.md).
 
-The job verifies the pin and the installed parser, parses every `*.gnn.md` sketch in the
-repository, and type-checks them. When the repository has no sketch yet, it parses the
-pinned upstream `input/gnn_files/basics/static_perception.md` exemplar; this is a pipeline
-and pin conformance baseline, not a claim that the repository already contains a model.
-Full description: [`../docs/gnn-conformance.md`](../docs/gnn-conformance.md).
+The job first verifies a standalone bootstrap and independent complete source manifest
+selected by `GNN_BOOTSTRAP` and `GNN_SOURCE_MANIFEST`, then admits parser ownership,
+origin and content before import. All parsing/checking and exit revalidation share one
+qualified lifetime. Installed mode requires genuine exact Git distribution provenance;
+explicit source mode reports its weaker origin and cannot silently replace a refused
+installation. Hosted delivery of these reviewed resources remains required.
+
+Repository `*.gnn.md` sketches take precedence; without any, the gate fetches the pinned
+upstream `input/gnn_files/basics/static_perception.md` exemplar. This is a pipeline
+baseline, not an authored gen25 model or scientific/native-execution qualification.
+Offline inputs and no-install regression selections:
+[`../docs/gnn-conformance.md`](../docs/gnn-conformance.md).

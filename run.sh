@@ -82,13 +82,18 @@ arm_test() {
 }
 
 arm_gnn() {
-  local python="${GNN_PYTHON:-$ROOT/.venv/gnn/bin/python}"
-  if [ ! -x "$python" ]; then
+  local python="${GNN_PYTHON-$ROOT/.venv/gnn/bin/python}"
+  if [ "${GNN_PYTHON+x}" = x ]; then
+    if [ ! -f "$python" ] || [ ! -x "$python" ]; then
+      echo "run.sh: GNN_PYTHON is not an executable file: $python" >&2
+      return 1
+    fi
+  elif [ ! -x "$python" ]; then
     require uv
     uv venv --no-project --seed --python "${GNN_PYTHON_VERSION:-3.12}" \
       "$ROOT/.venv/gnn" >&2
   fi
-  "$python" "$ROOT/scripts/gnn_conformance.py"
+  "$python" "$ROOT/scripts/gnn_conformance.py" "$@"
 }
 
 arm_measure() {

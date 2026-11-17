@@ -48,9 +48,9 @@ python -m aii_platform.aii_sidecar docs <repo> --overwrite
 ```
 
 That package ships in the private `aii-platform` kernel and is not available in every
-environment. When it is unavailable, a `config.yaml` change must be **hand-synced** into
-`.aii/docs/INTEGRATION.md` (the key-artifacts table mirrors `artifacts[]`). Say so when
-you do it, and regenerate once the private environment is available.
+environment. Never hand-edit its five projections. If qualified producer custody or
+runtime is unavailable, retain the source change and leave regeneration explicitly
+pending. Plain-YAML review is not renderer or validator qualification.
 
 ## Validation
 

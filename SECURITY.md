@@ -2,14 +2,15 @@
 
 ## Scope
 
-This repository is public and contains metadata and documentation only. It holds no
-executable code, credentials, or secrets. Security-relevant findings are therefore
-limited to issues such as:
+This public repository contains documentation, metadata and maintenance Python/shell.
+Security-relevant findings include:
 
 - accidental disclosure of private information (local paths, personal tool names,
   internal workflow details, credentials),
 - broken links or references that mislead users into unsafe destinations,
-- licensing or provenance misstatements.
+- licensing or provenance misstatements,
+- unsafe interpreter/parser admission or maintenance-command behavior,
+- incorrect generated inventory or sidecar handling.
 
 ## Reporting a vulnerability
 

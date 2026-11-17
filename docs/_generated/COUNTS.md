@@ -9,8 +9,8 @@ and regenerate again. Prose links to this page instead of copying a number.
 
 | Metric | Value |
 | --- | --- |
-| Tracked files | 40 |
-| Tracked Markdown files | 24 |
+| Tracked files | 42 |
+| Tracked Markdown files | 25 |
 | Pages under `docs/` | 8 |
 | GNN sketches (`*.gnn.md`) | 0 |
 

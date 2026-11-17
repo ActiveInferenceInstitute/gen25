@@ -1,9 +1,9 @@
 # Documentation
 
-Index for the gen25 repository documentation. gen25 is a **documentation and
-InstituteOS metadata repository**: it contains no application source code and no build
-system, and its only executable tests cover the gate script itself, so the documentation
-describes the repository's own conventions, metadata and CI rather than an application.
+Index for gen25's documentation, InstituteOS metadata and maintenance tooling.
+Maintenance Python/shell and gate regressions exist; substantive gen25 course or
+application sources do not. These guides describe repository conventions, metadata,
+maintenance code and CI rather than an implemented gen25 application.
 
 Start with the repository [README](../README.md) for orientation, then use the map below.
 Every long-lived document is also listed in the flat
@@ -15,6 +15,8 @@ Every long-lived document is also listed in the flat
 | --- | --- |
 | [`../README.md`](../README.md) | Repository orientation (start here). |
 | [`../AGENTS.md`](../AGENTS.md) | Working conventions for automated agents and contributors. |
+| [`../tests/test_maintenance.py`](../tests/test_maintenance.py) | Offline interpreter and tracked-inventory regressions. |
+| [`../tests/test_gnn_conformance.py`](../tests/test_gnn_conformance.py) | Real-source and genuine installed-origin GNN admission regressions. |
 | [`RUN_GUIDE.md`](RUN_GUIDE.md) | The `./run.sh` gate: arms, what CI runs, requirements, measurement protocol. |
 | [`ci.md`](ci.md) | The `docs` CI workflow: jobs, action pins, link checking and markdownlint. |
 | [`gnn-conformance.md`](gnn-conformance.md) | The pinned Generalized Notation Notation conformance arm. |

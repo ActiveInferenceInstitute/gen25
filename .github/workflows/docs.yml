@@ -46,8 +46,8 @@ jobs:
         with:
           python-version: ${{ env.GNN_PYTHON_VERSION }}
           enable-cache: "false"
-      # The arm bootstraps its own seeded interpreter, installs the pinned parser
-      # revision in one pip pass, and prints the JSON receipt. The required
-      # `markdown-link-check` job above is untouched and no check-run name changes.
+      # Reviewed bootstrap/manifest delivery is still required by this arm.
+      # Default provisioning installs the pinned revision; source/installed
+      # admission and actual exemplar verification must succeed before a receipt.
       - name: Run the pinned GNN conformance arm
         run: ./run.sh gnn

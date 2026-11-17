@@ -7,9 +7,9 @@ when working in this repository. It is part of the repository's documentation; s
 ## Repository facts
 
 - Public submodule of the ActiveInferenceInstitute GitHub organization.
-- Contents: documentation, InstituteOS metadata and the gate tooling only — no
-  application source code and no build system. The only executable tests are the gate's
-  own, in `tests/` (`./run.sh test`).
+- Contents: documentation, InstituteOS metadata and maintenance Python/shell.
+  `./run.sh test` covers maintenance and GNN gate regressions; no substantive gen25
+  course or application sources are committed here.
 - License: CC0 1.0 Universal (`LICENSE`); the `.aii` sidecar (`provenance.license`)
   declares the same.
 - Purpose metadata lives in `.aii/config.yaml` (schema: `aii-sidecar/v1`):
@@ -51,15 +51,17 @@ when working in this repository. It is part of the repository's documentation; s
 ```sh
 ./run.sh check   # generated counts, gate tests, markdownlint over the working tree, link check
 ./run.sh all     # the same, plus the pinned GNN conformance arm
+python3 -B -m unittest discover -s tests -p 'test_maintenance.py' -v
 ```
 
 The Node tools are pinned in [`scripts/gate_tools.json`](scripts/gate_tools.json) and
-fetched by `npx`; the `gnn` arm bootstraps its own interpreter in `.venv/gnn`. There is
-no type checker: this repository carries documentation and sidecar metadata, and the
-only executable tests are the gate's own in `tests/`, so `./run.sh all` is the complete
-gate. CI runs the same arms — the `markdown-link-check` job (a required status-check
-context) runs `links`, `lint`, `counts --check` and `test`, and `gnn-conformance`
-(`gnn conformance (pinned)`) runs `gnn`.
+fetched by `npx`. There is no separate type-checker arm. `./run.sh test` runs maintenance
+and GNN regressions. Maintenance tests need Python, bash and Git; GNN tests additionally
+need the independently reviewed resources and prepared runtimes in
+[`docs/gnn-conformance.md`](docs/gnn-conformance.md).
+No-install source proof is not installed-origin, hosted, native or scientific proof.
+CI's `markdown-link-check` job runs `links`, `lint`, `counts --check` and `test`;
+the `gnn-conformance` job runs `gnn`. Hosted reviewed-resource delivery remains required.
 
 ## Documentation maintenance
 
@@ -67,5 +69,6 @@ context) runs `links`, `lint`, `counts --check` and `test`, and `gnn-conformance
   `REVIEW_LOG_<date>.md` per review pass; the process is in
   [`docs/review-process.md`](docs/review-process.md).
 - When files are added or removed, update `artifacts[]` in `.aii/config.yaml` and bump
-  `meta.updated`, then hand-sync `.aii/docs/INTEGRATION.md` when the `aii-platform`
-  kernel is unavailable; see [`docs/sidecar.md`](docs/sidecar.md).
+  `meta.updated`, then regenerate all five projections with the canonical
+  `aii-platform` generator. Never hand-sync them; unavailable producer custody means
+  regeneration remains pending. See [`docs/sidecar.md`](docs/sidecar.md).
