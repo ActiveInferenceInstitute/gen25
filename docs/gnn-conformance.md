@@ -14,9 +14,9 @@ place the pinned revision appears. It declares schema `gnn-importer-pin/v1`:
 | --- | --- |
 | `schema` | `gnn-importer-pin/v1` |
 | `repository` | `ActiveInferenceInstitute/Generalized_Notation_Notation` |
-| `tag` | `v5.0.3` |
-| `revision` | `8f293d9ba810e6eda5c09842d9c7ed9ffa5f92c1` |
-| `recorded` | 2026-11-12 |
+| `tag` | `v5.1.0` |
+| `revision` | `75c834bd8519dc7b5adc4d24f16bf393cfd1ecdf` |
+| `recorded` | 2026-11-24 |
 
 The current values are reported in
 [`_generated/COUNTS.md`](_generated/COUNTS.md#gate-pins), which is generated from the pin

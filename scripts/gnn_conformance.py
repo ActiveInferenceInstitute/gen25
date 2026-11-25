@@ -37,9 +37,9 @@ import urllib.request
 from pathlib import Path
 
 PIN_PATH = Path(".github/gnn-pin.json")
-# Independently frozen producer bootstrap and COMPLETE v5.0.3 package manifest.
+# Independently frozen producer bootstrap and COMPLETE v5.1.0 package manifest.
 BOOTSTRAP_SHA256 = "f638d4c01fe7de31e43d793e59bf382d0c3d1a82f365c59238334a2b40adfb37"
-MANIFEST_SHA256 = "17a35bb2114e76a38119128d290d12377cb641652d70788000482366dca0a14a"
+MANIFEST_SHA256 = "43b33c0b2b40386afa3f306fec4cc13bc1fd7c3b570fbf11d5008bad5c8e6b51"
 # Dependencies the pinned parser imports but does not declare. Installed in the
 # same resolver pass as the parser itself.
 PARSER_DEPS = ("defusedxml", "psutil", "pyyaml")

@@ -6,8 +6,8 @@ The `gnn-conformance` job (display name `gnn conformance (pinned)`) is defined i
 
 It reads [`gnn-pin.json`](gnn-pin.json), the canonical pin document (schema
 `gnn-importer-pin/v1`), which pins
-`ActiveInferenceInstitute/Generalized_Notation_Notation` at `v5.0.3`
-(`8f293d9ba810e6eda5c09842d9c7ed9ffa5f92c1`). The current values are mirrored from the
+`ActiveInferenceInstitute/Generalized_Notation_Notation` at `v5.1.0`
+(`75c834bd8519dc7b5adc4d24f16bf393cfd1ecdf`). The current values are mirrored from the
 pin file into [`../docs/_generated/COUNTS.md`](../docs/_generated/COUNTS.md).
 
 The job first verifies a standalone bootstrap and independent complete source manifest

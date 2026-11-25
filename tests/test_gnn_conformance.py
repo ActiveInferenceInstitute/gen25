@@ -27,8 +27,8 @@ from test_maintenance import TemporaryWorkspace, required_program
 
 
 BOOTSTRAP_SHA256 = "f638d4c01fe7de31e43d793e59bf382d0c3d1a82f365c59238334a2b40adfb37"
-MANIFEST_SHA256 = "17a35bb2114e76a38119128d290d12377cb641652d70788000482366dca0a14a"
-SPEC_SHA256 = "8d08f3e951c7efc05dc5d84bbbece6765a40c3795bdac13ad8d7b33dde79567f"
+MANIFEST_SHA256 = "43b33c0b2b40386afa3f306fec4cc13bc1fd7c3b570fbf11d5008bad5c8e6b51"
+SPEC_SHA256 = "ea58f38a031aab36ebf44078ebcdcc2a2ca5594a32c9a8ed92e0f09d61f579bf"
 
 
 class GNNWorkspace(TemporaryWorkspace):
