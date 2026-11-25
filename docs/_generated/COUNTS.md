@@ -20,9 +20,9 @@ and regenerate again. Prose links to this page instead of copying a number.
 | --- | --- |
 | GNN pin schema | `gnn-importer-pin/v1` |
 | GNN pin repository | `ActiveInferenceInstitute/Generalized_Notation_Notation` |
-| GNN pin tag | `v5.0.3` |
-| GNN pin revision | `8f293d9ba810e6eda5c09842d9c7ed9ffa5f92c1` |
-| GNN pin recorded | 2026-11-12 |
+| GNN pin tag | `v5.1.0` |
+| GNN pin revision | `75c834bd8519dc7b5adc4d24f16bf393cfd1ecdf` |
+| GNN pin recorded | 2026-11-24 |
 | markdownlint-cli2 | 0.24.1 |
 | markdown-link-check | 3.15.0 |
 
